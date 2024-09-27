@@ -20,6 +20,8 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://api.fontshare.com/css?f%5B%5D=switzer@400,500,600,700&amp;display=swap"
         />
+        {/* logo */}
+        <link rel="icon" href="/logo.svg" />
       </head>
       <body className="text-gray-950 antialiased">{children}</body>
     </html>

@@ -1,9 +1,8 @@
 import { Button } from '@/components/button'
 import { GradientBackground } from '@/components/gradient'
 import { Link } from '@/components/link'
-import { Mark } from '@/components/logo'
-import { Checkbox, Field, Input, Label } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/16/solid'
+import Logo from '@/components/logo'
+import { Field, Input, Label } from '@headlessui/react'
 import { clsx } from 'clsx'
 import type { Metadata } from 'next'
 
@@ -21,7 +20,7 @@ export default function Login() {
           <form action="#" method="POST" className="p-7 sm:p-11">
             <div className="flex items-start">
               <Link href="/" title="Home">
-                <Mark className="h-9 fill-black" />
+                <Logo className="h-9 fill-black" />
               </Link>
             </div>
             <h1 className="mt-8 text-base/6 font-medium">Welcome back!</h1>
@@ -55,24 +54,6 @@ export default function Login() {
                 )}
               />
             </Field>
-            <div className="mt-8 flex items-center justify-between text-sm/5">
-              <Field className="flex items-center gap-3">
-                <Checkbox
-                  name="remember-me"
-                  className={clsx(
-                    'group block size-4 rounded border border-transparent shadow ring-1 ring-black/10 focus:outline-none',
-                    'data-[checked]:bg-black data-[checked]:ring-black',
-                    'data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-black',
-                  )}
-                >
-                  <CheckIcon className="fill-white opacity-0 group-data-[checked]:opacity-100" />
-                </Checkbox>
-                <Label>Remember me</Label>
-              </Field>
-              <Link href="#" className="font-medium hover:text-gray-600">
-                Forgot password?
-              </Link>
-            </div>
             <div className="mt-8">
               <Button type="submit" className="w-full">
                 Sign in
@@ -81,7 +62,7 @@ export default function Login() {
           </form>
           <div className="m-1.5 rounded-lg bg-gray-50 py-4 text-center text-sm/5 ring-1 ring-black/5">
             Not a member?{' '}
-            <Link href="#" className="font-medium hover:text-gray-600">
+            <Link href="/register" className="font-medium hover:text-gray-600">
               Create an account
             </Link>
           </div>
