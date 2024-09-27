@@ -2,14 +2,13 @@ import { Button } from '@/components/button'
 import { GradientBackground } from '@/components/gradient'
 import { Link } from '@/components/link'
 import Logo from '@/components/logo'
-import { Checkbox, Field, Input, Label } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/16/solid'
+import { Field, Input, Label } from '@headlessui/react'
 import { clsx } from 'clsx'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Login',
-    description: 'Sign in to your account to continue.',
+    title: 'Register',
+    description: 'Create an account to get started.',
 }
 
 export default function Register() {
@@ -24,10 +23,41 @@ export default function Register() {
                                 <Logo />
                             </Link>
                         </div>
-                        <h1 className="mt-8 text-base/6 font-medium">Welcome back!</h1>
+                        <h1 className="mt-8 text-base/6 font-medium">Create an account</h1>
                         <p className="mt-1 text-sm/5 text-gray-600">
-                            Sign in to your account to continue.
+                            Submit the form below to get started.
                         </p>
+                        <div className='grid grid-cols-2 gap-4'>
+                            <Field className="mt-8 space-y-3">
+                                <Label className="text-sm/5 font-medium">First Name</Label>
+                                <Input
+                                    required
+                                    autoFocus
+                                    type="text"
+                                    name="first_name"
+                                    className={clsx(
+                                        'block w-full rounded-lg border border-transparent shadow ring-1 ring-black/10',
+                                        'px-[calc(theme(spacing.2)-1px)] py-[calc(theme(spacing[1.5])-1px)] text-base/6 sm:text-sm/6',
+                                        'data-[focus]:outline data-[focus]:outline-2 data-[focus]:-outline-offset-1 data-[focus]:outline-black',
+                                    )}
+                                />
+                            </Field>
+                            <Field className="mt-8 space-y-3">
+                                <Label className="text-sm/5 font-medium">Last Name</Label>
+                                <Input
+                                    required
+                                    autoFocus
+                                    type="text"
+                                    name="last_name"
+                                    className={clsx(
+                                        'block w-full rounded-lg border border-transparent shadow ring-1 ring-black/10',
+                                        'px-[calc(theme(spacing.2)-1px)] py-[calc(theme(spacing[1.5])-1px)] text-base/6 sm:text-sm/6',
+                                        'data-[focus]:outline data-[focus]:outline-2 data-[focus]:-outline-offset-1 data-[focus]:outline-black',
+                                    )}
+                                />
+                            </Field>
+                        </div>
+
                         <Field className="mt-8 space-y-3">
                             <Label className="text-sm/5 font-medium">Email</Label>
                             <Input
@@ -55,24 +85,6 @@ export default function Register() {
                                 )}
                             />
                         </Field>
-                        <div className="mt-8 flex items-center justify-between text-sm/5">
-                            <Field className="flex items-center gap-3">
-                                <Checkbox
-                                    name="remember-me"
-                                    className={clsx(
-                                        'group block size-4 rounded border border-transparent shadow ring-1 ring-black/10 focus:outline-none',
-                                        'data-[checked]:bg-black data-[checked]:ring-black',
-                                        'data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-black',
-                                    )}
-                                >
-                                    <CheckIcon className="fill-white opacity-0 group-data-[checked]:opacity-100" />
-                                </Checkbox>
-                                <Label>Remember me</Label>
-                            </Field>
-                            <Link href="#" className="font-medium hover:text-gray-600">
-                                Forgot password?
-                            </Link>
-                        </div>
                         <div className="mt-8">
                             <Button type="submit" className="w-full">
                                 Sign in
@@ -80,9 +92,9 @@ export default function Register() {
                         </div>
                     </form>
                     <div className="m-1.5 rounded-lg bg-gray-50 py-4 text-center text-sm/5 ring-1 ring-black/5">
-                        Not a member?{' '}
-                        <Link href="#" className="font-medium hover:text-gray-600">
-                            Create an account
+                        Already a member?{' '}
+                        <Link href="/login" className="font-medium hover:text-gray-600">
+                            Login
                         </Link>
                     </div>
                 </div>
