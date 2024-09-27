@@ -1,6 +1,7 @@
+import { AuthProvider } from '@/hooks/useAuth'
 import '@/styles/tailwind.css'
 import type { Metadata } from 'next'
-
+import { Toaster } from 'react-hot-toast'
 export const metadata: Metadata = {
   title: {
     template: '%s - Plate AI',
@@ -23,7 +24,11 @@ export default function RootLayout({
         {/* logo */}
         <link rel="icon" href="/logo.svg" />
       </head>
-      <body className="text-gray-950 antialiased">{children}</body>
+      <AuthProvider>
+        <body className="text-gray-950 antialiased">
+          <Toaster />
+          {children}</body>
+      </AuthProvider>
     </html>
   )
 }
