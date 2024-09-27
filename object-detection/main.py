@@ -1,6 +1,7 @@
 import base64
 import re
 import json
+from datetime import datetime
 from groq import Groq
 
 def encode_image(image_path):
@@ -25,7 +26,6 @@ def get_food_items(client, base64_image):
         ],
         model="llava-v1.5-7b-4096-preview",
     )
-
     return chat_completion.choices[0].message.content
 
 def process_result(result):
@@ -35,22 +35,16 @@ def parse_json_array(data):
     try:
         return json.loads(data)
     except json.JSONDecodeError:
-        print("Error decoding JSON. Result was:", data)
         return []
 
 def parse_plain_list(data):
     return [item.strip().strip('"') for item in data.strip('[]').split(', ')]
 
 def unique_items(items):
-    unique_list = []
-    for item in items:
-        if item not in unique_list:
-            unique_list.append(item)
-    return unique_list
+    return list(set(items))
 
 def parse_result(processed_result):
     processed_result = processed_result.strip()
-    print(f"Processed Result: {processed_result}")
     if processed_result.startswith('[') and processed_result.endswith(']'):
         return parse_json_array(processed_result)
     else:
@@ -58,8 +52,6 @@ def parse_result(processed_result):
 
 def get_food_metrics(client, food_items):
     food_items_str = ', '.join([f'"{item}"' for item in food_items])
-    print(f"Food Items String: {food_items_str}")
-    
     if len(food_items) == 1:
         prompt = f"Please provide an object for the food item: {food_items_str}. Include 'food_item', 'calories', 'carbohydrates', 'proteins', 'sodium', and 'fats' as fields. Return the result in JSON format."
     else:
@@ -75,9 +67,34 @@ def get_food_metrics(client, food_items):
         }],
         model="llava-v1.5-7b-4096-preview",
     )
-    
     return chat_res.choices[0].message.content
 
+def format_metrics_to_json(food_metrics):
+    prompt = f"Convert the following food metrics to a JSON object without any additional comments or metrics:\n\n{food_metrics}\n\nReturn only the JSON object."
+    
+    chat_res = client.chat.completions.create(
+        messages=[{
+            "role": "user",
+            "content": [{
+                "type": "text",
+                "text": prompt
+            }],
+        }],
+        model="llama3-70b-8192",
+    )
+    return chat_res.choices[0].message.content.strip()
+
+def save_json_to_file(json_data):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"food_metrics_{timestamp}.json"
+    with open(filename, "w") as json_file:
+        json.dump(json_data, json_file, indent=4)
+
+def extract_json_content(data):
+    json_match = re.search(r'(\{.*\}|\[.*\])', data, re.DOTALL)
+    if json_match:
+        return json_match.group(0)
+    return None
 
 image_path = "sample.png"
 base64_image = encode_image(image_path)
@@ -90,20 +107,25 @@ max_retries = 6
 while retry_count < max_retries:
     result = get_food_items(client, base64_image)
     processed_result = process_result(result)
-    
-    print(f"Result from get_food_items: {result}")
-    print(f"Processed Result: {processed_result}")
-    
+
     if processed_result != "No food content found!":
         food_items_list = parse_result(processed_result)
         unique_food_items = unique_items(food_items_list)
 
-        print(f"Unique Food Items: {unique_food_items}")
-
         if unique_food_items:
             food_metrics = get_food_metrics(client, unique_food_items)
-            
-            print(f"Food Metrics: {food_metrics}")
-            break
+            structured_metrics = format_metrics_to_json(food_metrics)
+
+            json_content = extract_json_content(structured_metrics)
+            if json_content:
+                try:
+                    parsed_json = json.loads(json_content)
+                    save_json_to_file(parsed_json)
+                    print("Food metrics saved to JSON file.")
+                    break
+                except json.JSONDecodeError:
+                    retry_count += 1
+            else:
+                retry_count += 1
 
     retry_count += 1
