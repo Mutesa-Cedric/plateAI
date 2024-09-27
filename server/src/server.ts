@@ -22,8 +22,8 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
 
-    const origin = req.headers.origin as string;
-    res.setHeader("Access-Control-Allow-Origin", origin);
+    const origin = req.headers.origin
+    res.setHeader("Access-Control-Allow-Origin", origin ?? "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
     res.setHeader("Access-Contxprol-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");

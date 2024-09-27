@@ -3,7 +3,7 @@ import GetStarted from "@/components/onboarding/GetStarted";
 import Goal from "@/components/onboarding/Goal";
 import OnboardingQuestions from "@/components/onboarding/OnboardingQuestions";
 import useOnboarding from "@/hooks/useOnboarding";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Onboarding() {
   const { activeOnboardingStep } = useOnboarding();
@@ -21,6 +21,7 @@ export default function Onboarding() {
       {
         activeOnboardingStep === "body_scan" && <BodyScan />
       }
+      {/* <Login /> */}
     </View>
   );
 }
