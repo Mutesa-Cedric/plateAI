@@ -1,13 +1,12 @@
 {
-  "name": "radiant",
+  "name": "plate-ai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "typegen": "sanity schema extract --path=src/sanity/extract.json && sanity typegen generate && rm ./src/sanity/extract.json"
+    "lint": "next lint"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.1",
