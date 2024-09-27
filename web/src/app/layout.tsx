@@ -1,10 +1,11 @@
+import { AuthProvider } from '@/hooks/useAuth'
 import '@/styles/tailwind.css'
 import type { Metadata } from 'next'
-
+import { Toaster } from 'react-hot-toast'
 export const metadata: Metadata = {
   title: {
-    template: '%s - Radiant',
-    default: 'Radiant - Close every deal',
+    template: '%s - Plate AI',
+    default: 'Plate AI - AI-powered meal Analysis',
   },
 }
 
@@ -20,14 +21,14 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://api.fontshare.com/css?f%5B%5D=switzer@400,500,600,700&amp;display=swap"
         />
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          title="The Radiant Blog"
-          href="/blog/feed.xml"
-        />
+        {/* logo */}
+        <link rel="icon" href="/logo.svg" />
       </head>
-      <body className="text-gray-950 antialiased">{children}</body>
+      <AuthProvider>
+        <body className="text-gray-950 antialiased">
+          <Toaster />
+          {children}</body>
+      </AuthProvider>
     </html>
   )
 }
