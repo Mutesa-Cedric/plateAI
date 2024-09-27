@@ -9,7 +9,6 @@ import { Navbar } from '@/components/navbar'
 import { Screenshot } from '@/components/screenshot'
 import { Heading, Subheading } from '@/components/text'
 import type { Metadata } from 'next'
-import Image from 'next/image'
 
 export const metadata: Metadata = {
   description:
