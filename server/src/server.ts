@@ -5,19 +5,13 @@ import bodyParser = require("body-parser");
 import cookieParser = require("cookie-parser");
 import authRouter from "./modules/auth/authRouter";
 
-import { dbConnection } from "./utils/dbConnection";
-import isAuthenticated from "./middlewares/auth";
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.use(cors());
-dbConnection().then(() => {
-    console.log("Database connected");
-    app.listen(PORT, () => {
-        console.log(`Server is listening on port ${PORT}`);
-    });
-}).catch((err) => {
-    console.log(err);
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
 });
 
 app.use(bodyParser.json())
