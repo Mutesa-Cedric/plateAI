@@ -142,7 +142,7 @@ typing_extensions==4.12.2
 tzdata==2024.2
 ultralytics==8.2.102
 ultralytics-thop==2.0.8
-urllib3
+urllib3>=1.25.8,<3.0.0
 virtualenv==20.26.5
 webcolors==24.8.0
 webdriver-manager==4.0.2
