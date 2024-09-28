@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             AsyncStorage.setItem("token", data.token);
             toast.show("Logged in successfully", {
                 type: "success",
+                duration: 1000
             });
             router.push("/Home");
         } catch (error: any) {
