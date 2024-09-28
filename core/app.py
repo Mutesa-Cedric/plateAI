@@ -21,6 +21,11 @@ endpoints = [
         "endpoint": "/stt",
         "description": "Speech-to-Text",
         "method": "POST"
+    },
+    {
+        "endpoint": "/diet-check",
+        "description": "Diet Check",
+        "method": "POST"
     }
 ]
 

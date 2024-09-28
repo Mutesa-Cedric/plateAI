@@ -33,8 +33,7 @@ def stt():
 
 @api.route('/diet-check', methods=['POST'])
 def diet_checker():
-    
-    image = request.files['image']
+    image = request.json.get("base64")
     analysis = diet_check(image)
 
     return jsonify(analysis)
