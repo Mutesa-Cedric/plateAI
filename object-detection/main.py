@@ -20,7 +20,7 @@ def get_food_items(client, base64_image):
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "Return a list of edible food items in an array [ ] with items separated by commas only. No other special characters or text. If no food items are detected, return 'No food content found!'"},
+                    {"type": "text", "text": "Analyze the image and check if it contains any edible food items. If food items are present, return them in an array [ ] with items separated by commas only. If the image contains other objects or no food is detected, return 'No food content found!'."},
                     {
                         "type": "image_url",
                         "image_url": {
@@ -36,6 +36,10 @@ def get_food_items(client, base64_image):
 
 def process_result(result):
     return re.sub(r'(\w+):', r'\1:', result)
+
+def contains_no_food_message(result):
+    no_food_phrases = ["no food content found", "no food item", "no food"]
+    return any(phrase in result.lower() for phrase in no_food_phrases)
 
 def parse_json_array(data):
     try:
@@ -100,7 +104,7 @@ def extract_json_content(data):
         return json_match.group(0)
     return None
 
-image_path = "sample.jpg"
+image_path = "sample.png"
 base64_image = encode_image(image_path)
 
 client = Groq(api_key="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")
@@ -112,27 +116,28 @@ while retry_count < max_retries:
     result = get_food_items(client, base64_image)
     processed_result = process_result(result)
 
-    if "No food content found" not in processed_result:
-        food_items_list = parse_result(processed_result)
-        unique_food_items = unique_items(food_items_list)
+    if contains_no_food_message(processed_result):
+        print("No food content found! Program terminating.")
+        break
 
-        if not unique_food_items:
-            print("No food content found!")
+    food_items_list = parse_result(processed_result)
+    unique_food_items = unique_items(food_items_list)
+
+    if not unique_food_items:
+        print("No food content found! Program terminating.")
+        break
+
+    food_metrics = get_food_metrics(client, unique_food_items)
+    structured_metrics = format_metrics_to_json(food_metrics)
+
+    json_content = extract_json_content(structured_metrics)
+    if json_content:
+        try:
+            parsed_json = json.loads(json_content)
+            save_json_to_file(parsed_json)
+            print("Food metrics saved to JSON file.")
             break
-
-        food_metrics = get_food_metrics(client, unique_food_items)
-        structured_metrics = format_metrics_to_json(food_metrics)
-
-        json_content = extract_json_content(structured_metrics)
-        if json_content:
-            try:
-                parsed_json = json.loads(json_content)
-                save_json_to_file(parsed_json)
-                print("Food metrics saved to JSON file.")
-                break
-            except json.JSONDecodeError:
-                retry_count += 1
-        else:
+        except json.JSONDecodeError:
             retry_count += 1
-
-    retry_count += 1
+    else:
+        retry_count += 1
