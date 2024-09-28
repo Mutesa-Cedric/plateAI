@@ -29,6 +29,7 @@ export default function Goal() {
         <View className="flex w-full items-center gap-5 my-10">
           {goals.map((goal) => (
             <TouchableHighlight
+              key={goal.purpose}
               className={`bg-white/70 p-10 w-[100%] flex items-center justify-center rounded-md shadow-md`}
               onPress={() => {
                 setOnboardingData({ ...onboardingData, purpose: goal.purpose });

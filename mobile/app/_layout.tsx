@@ -32,7 +32,6 @@ export default function RootLayout() {
   return (
     <ToastProvider>
       <RecoilRoot>
-
         <ThemeProvider value={DefaultTheme}>
           <AuthProvider>
             <GestureHandlerRootView>
@@ -44,7 +43,6 @@ export default function RootLayout() {
                 />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-
                 <Stack.Screen name="+not-found" />
               </Stack>
             </GestureHandlerRootView>
