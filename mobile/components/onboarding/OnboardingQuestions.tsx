@@ -44,7 +44,7 @@ export default function OnBoardingQuestions() {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [age, setAge] = useState("");
-  const [gender, setGender] = useState<1 | 2| undefined>(undefined);
+  const [gender, setGender] = useState<1 | 2 | undefined>(undefined);
 
   const handleNumericInput =
     (setter: (val: string) => void) => (input: string) => {
@@ -53,7 +53,6 @@ export default function OnBoardingQuestions() {
     };
 
   const handleNext = () => {
-    setActiveOnboardingStep("onboarding_questions");
     setOnboardingData({
       ...onboardingData,
       height: parseInt(height),
@@ -61,6 +60,7 @@ export default function OnBoardingQuestions() {
       age: parseInt(age),
       gender,
     });
+    router.push("/Register");
   };
 
   return (
@@ -90,7 +90,7 @@ export default function OnBoardingQuestions() {
             onChangeText={handleNumericInput(setAge)}
           />
 
-          <View className="w-full flex my-3">
+          <View className="w-full flex my-2">
             <Text className="text-2xl font-[PeachMelon] text-center px-10">
               What gender are you?
             </Text>

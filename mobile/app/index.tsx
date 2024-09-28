@@ -1,15 +1,13 @@
-import BodyScan from "@/components/onboarding/BodyScan";
+import { activeOnboardingStepState } from "@/atoms";
 import GetStarted from "@/components/onboarding/GetStarted";
 import Goal from "@/components/onboarding/Goal";
 import OnboardingQuestions from "@/components/onboarding/OnboardingQuestions";
-import useOnboarding from "@/hooks/useOnboarding";
 import { View } from "react-native";
-import HomeScreen from "./(tabs)/Home";
-import Login from "./(auth)/Login";
-import NewScan from "./(tabs)/NewScan";
+import { useRecoilValue } from "recoil";
 
 export default function Onboarding() {
-  const { activeOnboardingStep } = useOnboarding();
+  const activeOnboardingStep = useRecoilValue(activeOnboardingStepState);
+
   return (
     <View>
       {
@@ -20,9 +18,6 @@ export default function Onboarding() {
       }
       {
         activeOnboardingStep === "onboarding_questions" && <OnboardingQuestions />
-      }
-      {
-        activeOnboardingStep === "body_scan" && <BodyScan />
       }
       {/* <NewScan /> */}
     </View>

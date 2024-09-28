@@ -44,6 +44,7 @@
     "react-native-screens": "3.31.1",
     "react-native-toast-notifications": "^3.4.0",
     "react-native-web": "~0.19.10",
+    "recoil": "^0.7.7",
     "swr": "^2.2.5"
   },
   "devDependencies": {

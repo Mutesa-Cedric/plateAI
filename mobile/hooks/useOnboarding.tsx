@@ -6,7 +6,7 @@ export enum Purpose {
 }
 
 export default function useOnboarding() {
-    const [activeOnboardingStep, setActiveOnboardingStep] = React.useState<"get_started" | "goal" | "onboarding_questions">("get_started");
+    const [activeOnboardingStep, setActiveOnboardingStep] = React.useState<"get_started" | "goal" | "onboarding_questions">("onboarding_questions");
 
     const [onboardingData, setOnboardingData] = React.useState<{
         goal?: Purpose,

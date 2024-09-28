@@ -4,9 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import useOnboarding from "@/hooks/useOnboarding";
 import CustomButton from "../CustomButton";
+import { useRecoilState } from "recoil";
+import { activeOnboardingStepState } from "@/atoms";
 
 export default function GetStarted() {
-    const { activeOnboardingStep, setActiveOnboardingStep } = useOnboarding();
+  const [activeOnboardingStep, setActiveOnboardingStep] = useRecoilState(activeOnboardingStepState);
+
   return (
     <ImageBackground
       source={require("../../assets/images/get-started.jpg")}
@@ -34,7 +37,7 @@ export default function GetStarted() {
           <Text className="text-lg text-white">
             Already have an account?{" "}
             <Link href="/Login" push className="ml-10">
-              <Text className="text-blue-500 ">Login</Text>
+              <Text className="text-primary ">Login</Text>
             </Link>
           </Text>
         </View>
