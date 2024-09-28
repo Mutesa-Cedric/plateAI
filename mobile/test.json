@@ -1,0 +1,170 @@
+[
+    {
+        "calories": 300,
+        "carbohydrates": 40,
+        "fats": 12,
+        "food_item": "Sandwich",
+        "proteins": 10,
+        "sodium": 350
+    },
+    {
+        "calories": 150,
+        "carbohydrates": 20,
+        "fats": 10,
+        "food_item": "Frites",
+        "proteins": 3,
+        "sodium": 200
+    },
+    {
+        "calories": 100,
+        "carbohydrates": 20,
+        "fats": 0,
+        "food_item": "Yoghurt",
+        "proteins": 10,
+        "sodium": 50
+    },
+    {
+        "calories": 250,
+        "carbohydrates": 35,
+        "fats": 12,
+        "food_item": "Waffle",
+        "proteins": 5,
+        "sodium": 300
+    },
+    {
+        "calories": 120,
+        "carbohydrates": 0,
+        "fats": 10,
+        "food_item": "Bacon",
+        "proteins": 10,
+        "sodium": 400
+    },
+    {
+        "calories": 0,
+        "carbohydrates": 0,
+        "fats": 0,
+        "food_item": "Iced Tea",
+        "proteins": 0,
+        "sodium": 0
+    },
+    {
+        "calories": 120,
+        "carbohydrates": 20,
+        "fats": 6,
+        "food_item": "Chocolate cookie",
+        "proteins": 2,
+        "sodium": 100
+    },
+    {
+        "calories": 100,
+        "carbohydrates": 20,
+        "fats": 2,
+        "food_item": "Granola",
+        "proteins": 5,
+        "sodium": 50
+    },
+    {
+        "calories": 200,
+        "carbohydrates": 25,
+        "fats": 10,
+        "food_item": "Ramp tart",
+        "proteins": 5,
+        "sodium": 300
+    },
+    {
+        "calories": 150,
+        "carbohydrates": 30,
+        "fats": 2,
+        "food_item": "Noodles",
+        "proteins": 5,
+        "sodium": 200
+    },
+    {
+        "calories": 70,
+        "carbohydrates": 1,
+        "fats": 5,
+        "food_item": "Mozzarella",
+        "proteins": 6,
+        "sodium": 200
+    },
+    {
+        "calories": 5,
+        "carbohydrates": 5,
+        "fats": 0,
+        "food_item": "Macchiato",
+        "proteins": 3,
+        "sodium": 5
+    },
+    {
+        "calories": 150,
+        "carbohydrates": 30,
+        "fats": 2,
+        "food_item": "Pasta",
+        "proteins": 5,
+        "sodium": 200
+    },
+    {
+        "calories": 120,
+        "carbohydrates": 20,
+        "fats": 8,
+        "food_item": "Chips",
+        "proteins": 2,
+        "sodium": 150
+    },
+    {
+        "calories": 150,
+        "carbohydrates": 30,
+        "fats": 2,
+        "food_item": "Oatmeal",
+        "proteins": 5,
+        "sodium": 50
+    },
+    {
+        "calories": 100,
+        "carbohydrates": 20,
+        "fats": 2,
+        "food_item": "Breadstick",
+        "proteins": 2,
+        "sodium": 100
+    },
+    {
+        "calories": 50,
+        "carbohydrates": 12,
+        "fats": 0,
+        "food_item": "Orange juice",
+        "proteins": 1,
+        "sodium": 10
+    },
+    {
+        "calories": 350,
+        "carbohydrates": 40,
+        "fats": 20,
+        "food_item": "Burger",
+        "proteins": 25,
+        "sodium": 400
+    },
+    {
+        "calories": 100,
+        "carbohydrates": 10,
+        "fats": 5,
+        "food_item": "Salad",
+        "proteins": 5,
+        "sodium": 50
+    },
+    {
+        "calories": 200,
+        "carbohydrates": 30,
+        "fats": 10,
+        "food_item": "Candy bar",
+        "proteins": 5,
+        "sodium": 100
+    },
+    {
+        "calories": 300,
+        "carbohydrates": 40,
+        "fats": 15,
+        "food_item": "Pizza",
+        "proteins": 15,
+        "sodium": 500
+    }
+]

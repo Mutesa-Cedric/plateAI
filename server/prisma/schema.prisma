@@ -26,3 +26,23 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// model FoodItem {
+//   id            String   @id @default(cuid())
+//   foodItem      String
+//   calories      Int
+//   carbohydrates Float
+//   fats          Float
+//   proteins      Float
+//   sodium        Int
+//   createdAt     DateTime @default(now())
+//   updatedAt     DateTime @updatedAt
+// }
+
+model Meal {
+  id        String   @id @default(cuid())
+  image     String
+  foodItems Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
