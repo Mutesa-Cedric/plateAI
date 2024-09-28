@@ -32,7 +32,6 @@ filelock==3.16.1
 Flask==3.0.3
 Flask-Cors==5.0.0
 fonttools==4.54.1
--e git+https://github.com/lannguyen0910/food-recognition.git@c3f29ffb07b38532bc9e98fce7cb9a6a3802980f#egg=food_recognition
 fsspec==2024.9.0
 gdown==5.2.0
 google_images_download==2.8.0
