@@ -26,3 +26,10 @@ export const mealBeingScannedState = atom<{
     key: 'MealBeingScanned',
     default: null
 });
+
+export const mostRecentMealState = atom<{
+    foodItems: any[];
+} | null>({
+    key: 'MostRecentMeal',
+    default: null
+});
