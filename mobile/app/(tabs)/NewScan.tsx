@@ -1,4 +1,5 @@
 import CustomButton from '@/components/CustomButton';
+import { AIAxios } from '@/lib/axios.config';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRef, useState } from 'react';
@@ -37,10 +38,11 @@ export default function NewScan() {
         if (cameraRef.current) {
             // @ts-ignore
             const photo = await cameraRef.current.takePictureAsync({
-                base64:true,
-                exif:false
+                base64: true,
+                exif: false
             });
             setCapturedImage(photo);
+            console.log(Object.keys(photo));
         }
     };
 
@@ -48,9 +50,14 @@ export default function NewScan() {
         setCapturedImage(null);
     };
 
-    const useImage = () => {
+    const useImage = async () => {
         // Handle using the image (e.g., send to server, save locally, etc.)
-        
+        try {
+            const { data } = await AIAxios.post("/diet-check", capturedImage);
+            console.log(data)
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
