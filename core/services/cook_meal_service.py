@@ -1,6 +1,7 @@
 from groq import Groq
+from config import Config
 
-client = Groq()
+client = Groq(api_key=Config.GROQ_API_KEY)
 
 def format_meal_history(meal_history):
     return [
