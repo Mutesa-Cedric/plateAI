@@ -38,7 +38,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="NewScan"
+        name="MealScan"
         options={{
           title: '',
           tabBarIcon: ({ focused }) => (
@@ -70,6 +70,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="Profile"
         options={{

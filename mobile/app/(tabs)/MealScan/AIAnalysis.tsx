@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function Assistant() {
+export default function AIAnalysis() {
     return (
         <View>
-            <Text>Assistant</Text>
+            <Text>AIAnalysis</Text>
         </View>
     )
 }
