@@ -1,39 +1,38 @@
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import Logo from '@/components/Logo'
-// import useAuth from '@/hooks/useAuth'
-// import { validateEmail, validatePassword } from '@/lib/utils'
-import { Link, useRouter } from 'expo-router'
+import useAuth from '@/hooks/useAuth'
+import { validateEmail, validatePassword } from '@/lib/utils'
+import { Link } from 'expo-router'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useToast } from 'react-native-toast-notifications'
 
 const Login = () => {
-    const router = useRouter();
     const toast = useToast();
-    // const { loggingIn, login } = useAuth();
+    const { loggingIn, login } = useAuth();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
     const handleSubmit = () => {
-        // if (!formData.email || !formData.password) {
-        //     return toast.show("Please fill in all fields", {
-        //         type: 'danger'
-        //     });
-        // }
-        // if (!validateEmail(formData.email)) {
-        //     return toast.show("Please enter a valid email", {
-        //         type: 'danger'
-        //     });
-        // }
-        // if (!validatePassword(formData.password)) {
-        //     return toast.show("Password must be at least 4 characters", {
-        //         type: 'danger'
-        //     });
-        // }
-        // login(formData.email, formData.password);
+        if (!formData.email || !formData.password) {
+            return toast.show("Please fill in all fields", {
+                type: 'danger'
+            });
+        }
+        if (!validateEmail(formData.email)) {
+            return toast.show("Please enter a valid email", {
+                type: 'danger'
+            });
+        }
+        if (!validatePassword(formData.password)) {
+            return toast.show("Password must be at least 4 characters", {
+                type: 'danger'
+            });
+        }
+        login(formData.email, formData.password);
     }
     return (
         <SafeAreaView>
@@ -58,15 +57,14 @@ const Login = () => {
                 </View>
                 <CustomButton
                     title='Login'
-                    // handlePress={handleSubmit}
-                    handlePress={() => router.push("/Home")}
+                    handlePress={handleSubmit}
+                    isLoading={loggingIn}
                     containerStyles='mt-8'
-                // isLoading={loggingIn}
                 />
                 <View className='flex flex-row gap-1 mt-3'>
                     <Text className='text-base'>Don't have an account?</Text>
                     {/* @ts-ignore */}
-                    <Link href={'/Register'}>
+                    <Link href={'/'}>
                         <Text className='text-primary text-base'>signup</Text>
                     </Link>
                 </View>

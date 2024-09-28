@@ -4,6 +4,7 @@ import cors = require("cors");
 import bodyParser = require("body-parser");
 import cookieParser = require("cookie-parser");
 import authRouter from "./modules/auth/authRouter";
+import mealsRouter from "./modules/meal/mealsRouter";
 
 const PORT = process.env.PORT || 8000;
 
@@ -37,7 +38,7 @@ app.use((req, res, next) => {
 
 // router middlewares
 app.use("/auth", authRouter);
-
+app.use("/meals", mealsRouter);
 app.get("/", (req, res) => {
     res.send("Hello world");
 });

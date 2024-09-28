@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import axios from "@/lib/axios.config";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePathname, useRouter } from "expo-router";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useToast } from "react-native-toast-notifications";
-import axios from "@/lib/axios.config";
 import { User } from "../types";
 
 interface AuthContextType {
@@ -37,11 +37,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     //     }
     //     const fetchUser = async () => {
     //         try {
-    //             const { data } = await axios.get("/users/me");
+    //             const { data } = await axios.get("/auth/me");
     //             setUser(data.user);
     //         } catch (error) {
     //             setUser(null);
-    //             if (!['/', '/login', '/signup'].includes(pathname)) {
+    //             if (!['/', '/Login', '/Register'].includes(pathname)) {
     //                 router.push("/Login");
     //             }
     //         } finally {
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             toast.show("Logged in successfully", {
                 type: "success",
             });
-            router.push("/");
+            router.push("/Home");
         } catch (error: any) {
             console.log(error);
             if (error.response.status === 400) {
