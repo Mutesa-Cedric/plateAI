@@ -10,7 +10,7 @@ def encode_image(image_file):
 
 # Prompt 1: List all things visible in the image
 def list_image_contents(client, base64_image):
-    prompt = '''List all objects visible in the image. Return response must look like this: ['item1','item2', ...] No explanations or extra text. Please no explainations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'''
+    prompt = '''List all objects visible in the image. Return response must look like this: ['item1','item2', ...] No explanations or extra text. Please no explanations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'''
     
     chat_completion = client.chat.completions.create(
         messages=[
@@ -29,7 +29,7 @@ def list_image_contents(client, base64_image):
 
 # Prompt 2: Extract only edible items from the listed objects
 def extract_edible_items(client, listed_objects):
-    prompt = f'''From the provided list, return an array containing only edible items. Response must look like this: ['item1', 'item2', ...]. No explanations or extra text. If no edible items are detected, return 'No edible items found!'. Please no explainations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'''
+    prompt = f'''From the provided list, return an array containing only edible items. Response must look like this: ['item1', 'item2', ...]. No explanations or extra text. If no edible items are detected, return 'No edible items found!'. Please no explanations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'''
     
     chat_res = client.chat.completions.create(
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}, {"type": "text", "text": listed_objects}]}],
@@ -40,7 +40,7 @@ def extract_edible_items(client, listed_objects):
 
 # Prompt 3: Remove non-edible items and return only edible items
 def remove_non_edible_items(client, edible_items_list):
-    prompt = f"Remove any non-edible items from the provided array. Only return the array of edible items. Response must look like this: ['item1', 'item2', ...]. No explanations or extra text. If no edible items are detected, return 'No edible items found!'"
+    prompt = f"Remove any non-edible items from the provided array. Only return the array of edible items. Response must look like this: ['item1', 'item2', ...]. No explanations or extra text. If no edible items are detected, return 'No edible items found! Please no explanations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'"
     
     chat_res = client.chat.completions.create(
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}, {"type": "text", "text": edible_items_list}]}],
@@ -51,7 +51,7 @@ def remove_non_edible_items(client, edible_items_list):
 
 # Prompt 4: Create nutritional objects for each food item
 def get_food_metrics(client, final_edible_items):
-    prompt = f"For only first 7 items, return an array of JSON objects in the format [{{'food_item': 'item', 'calories': 'value', 'carbohydrates': 'value', 'proteins': 'value', 'sodium': 'value', 'fats': 'value'}}]. No any explanations, only JSON. If no food items are detected, return 'No food items found! Please no explainations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'"
+    prompt = f"For only first 7 items, return an array of JSON objects in the format [{{'food_item': 'item', 'calories': 'value', 'carbohydrates': 'value', 'proteins': 'value', 'sodium': 'value', 'fats': 'value'}}]. No any explanations, only JSON. If no food items are detected, return 'No food items found! Please no explanations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it.'"
     
     chat_res = client.chat.completions.create(
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}, {"type": "text", "text": final_edible_items}]}],
