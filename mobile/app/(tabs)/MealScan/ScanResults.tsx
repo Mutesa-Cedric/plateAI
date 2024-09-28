@@ -1,16 +1,38 @@
-import { View, Text, Image } from 'react-native'
-import React, { useState } from 'react'
-import { useRouter } from 'expo-router'
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { mealBeingScannedState } from '@/atoms';
+import MealLoadingView from '@/components/MealLoadingView';
 import { AIAxios } from '@/lib/axios.config';
 import { LinearGradient } from 'expo-linear-gradient';
-import MealLoadingView from '@/components/MealLoadingView';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Image, Text, View } from 'react-native';
+import { useRecoilState } from 'recoil';
+import { useToast } from 'react-native-toast-notifications';
+import MealScanError from '@/components/MealScanError';
+
 
 export default function ScanResults() {
     const router = useRouter();
     const [mealBeingScanned, setMealBeingScanned] = useRecoilState(mealBeingScannedState);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const toast = useToast();
+
+    const fetchMealData = async () => {
+        try {
+            const { data } = await AIAxios.post("/diet-check", mealBeingScanned);
+            if (data.error) {
+                setError(data.error);
+                toast.show(data.error, { type: "error" });
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchMealData();
+    }, [])
 
     return (
         <View>
@@ -36,6 +58,9 @@ export default function ScanResults() {
                 loading && <MealLoadingView />
             }
 
+            {
+                error && <MealScanError error={error} />
+            }
         </View>
     )
 }
