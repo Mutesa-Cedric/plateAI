@@ -1,5 +1,6 @@
 from groq import Groq
 from config import Config
+import requests
 
 client = Groq(api_key=Config.GROQ_API_KEY)
 
@@ -56,6 +57,28 @@ def format_markdown(markdown_string):
     
     return "\n".join(lines[start_index:])
 
+def generate_one_liner(fmt_res):
+    one_liner_prompt = f"""
+    Based on the following meal response, generate a one-liner description suitable for image search. No extra commentary or words are needed:
+
+    {fmt_res}
+
+    ### One-liner description:
+    """
+    
+    response = client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": "You are a creative assistant."},
+            {"role": "user", "content": one_liner_prompt}
+        ],
+        model="llama3-8b-8192",
+        temperature=0.5,
+        max_tokens=10,
+        top_p=1
+    )
+    
+    return response.choices[0].message.content.strip()
+
 def suggest_next_meal(user_profile, meal_history):
     formatted_meal_history = format_meal_history(meal_history)
     prompt = build_prompt(user_profile, formatted_meal_history)
@@ -74,5 +97,8 @@ def suggest_next_meal(user_profile, meal_history):
     response_content = response.choices[0].message.content
 
     fmt_res = format_markdown(response_content)
+    one_liner_description = generate_one_liner(fmt_res)
 
-    return {"response": fmt_res}
+    image_64 = requests.get(f"http://157.173.127.185:4000?topic={one_liner_description}")
+
+    return {"response": fmt_res, "image": image_64.text}
