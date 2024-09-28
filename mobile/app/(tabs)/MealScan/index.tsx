@@ -1,6 +1,5 @@
 import { mealBeingScannedState } from '@/atoms';
 import CustomButton from '@/components/CustomButton';
-import { AIAxios } from '@/lib/axios.config';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -44,7 +43,8 @@ export default function NewScan() {
             // @ts-ignore
             const photo = await cameraRef.current.takePictureAsync({
                 base64: true,
-                exif: false
+                exif: false,
+                quality: 0.5,
             });
             setCapturedImage(photo);
             console.log(Object.keys(photo));

@@ -15,7 +15,7 @@ app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
 
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '100mb' }));
 app.use(cookieParser());
 
 // @ts-ignore   

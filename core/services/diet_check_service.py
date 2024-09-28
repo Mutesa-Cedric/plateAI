@@ -71,7 +71,7 @@ def diet_check(base64_image):
     client = Groq(api_key=Config.GROQ_API_KEY)
     
     # Step 1: List contents of the image
-    for _ in range(6):  # Maximum 6 retries
+    for _ in range(10):  # Maximum 10 retries
 
         # Step 1: List contents of the image
         image_contents = list_image_contents(client, base64_image)
