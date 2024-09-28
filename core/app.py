@@ -31,6 +31,11 @@ endpoints = [
         "endpoint": "/cook-for-me",
         "description": "Generate Next Meal",
         "method": "POST"
+    },
+        {
+        "endpoint": "/advisor",
+        "description": "Analysis and Advice",
+        "method": "POST"
     }
 ]
 

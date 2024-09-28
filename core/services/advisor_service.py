@@ -1,17 +1,14 @@
 import re
-import json
 from config import Config
 from groq import Groq
 
 def get_advice(client, recent_meal, user, past_meals):
     prompt = (
         f"We have a user ({user}), analyze this user's recent meal ({recent_meal}) and past meals ({past_meals})."
-        f"Give JSON advice for the recent meal with evaluations and suggestions in relation to user's purpose/goal. "
-        f"Format: "
-        f"{{'description': 'Don't list components of meal, describe meal based on it's food_item, calories, carbohydrates, proteins, sodium, fats', 'advice': 'recommendations for improving diet like <In order to improve you diet consider doing ...>'}}. "
-        f"No explanations or extra text."
-        f"Keep your response strictly in this format."
-        f"Please no explanations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it."
+        f"Give advice in two sections: "
+        f"1. Description: Describe the recent meal based on its food items, calories, carbohydrates, proteins, sodium, fats, without listing components."
+        f"2. Advice: Provide recommendations for improving the user's diet in relation to their goal/purpose."
+        f"Do not include any additional information or explanations."
     )
     
     chat_res = client.chat.completions.create(
@@ -21,22 +18,33 @@ def get_advice(client, recent_meal, user, past_meals):
     
     return chat_res.choices[0].message.content.strip()
 
-def extract_json_content(data):
-    json_match = re.search(r'(\{.*\}|\[.*\])', data, re.DOTALL)
-    return json_match.group(0) if json_match else None
 
-def retry_json_parsing(advice, retries=10):
-    for _ in range(retries):
-        json_content = extract_json_content(advice)
-        if json_content:
-            try:
-                return json.loads(json_content)
-            except json.JSONDecodeError:
-                continue
-    return {"error": "Error decoding JSON content after multiple attempts"}
+def sanitize_markdown(markdown_text):
+    # Remove markdown headers (e.g., # Header)
+    markdown_text = re.sub(r'#.*\n', '', markdown_text)
+    
+    # Remove bold, italic, and other markdown emphasis (e.g., **bold** or *italic*)
+    markdown_text = re.sub(r'(\*\*|\*|__|_)(.*?)\1', r'\2', markdown_text)
+    
+    # Remove inline code or code blocks (e.g., `code` or ```code block```)
+    markdown_text = re.sub(r'`([^`]*)`', r'\1', markdown_text)
+    markdown_text = re.sub(r'```[\s\S]*?```', '', markdown_text)
+    
+    # Remove links but keep the link text (e.g., [text](url) -> text)
+    markdown_text = re.sub(r'\[(.*?)\]\((.*?)\)', r'\1', markdown_text)
+    
+    # Remove images (e.g., ![alt text](image url))
+    markdown_text = re.sub(r'!\[(.*?)\]\((.*?)\)', '', markdown_text)
+    
+    # Remove HTML tags if there are any (e.g., <div> -> remove)
+    markdown_text = re.sub(r'<[^>]*>', '', markdown_text)
+    
+    # Replace new lines with <br> for frontend display
+    markdown_text = markdown_text.replace('\n', '<br>')
+    
+    return markdown_text
 
 def advisor_service(recent_meal, user, past_meals):
     client = Groq(api_key=Config.GROQ_API_KEY)
     advice = get_advice(client, recent_meal, user, past_meals)
-    print("Advice: ", advice)
-    return retry_json_parsing(advice)
+    return {"advice": sanitize_markdown(advice)}
