@@ -1,6 +1,5 @@
 import { mealBeingScannedState } from '@/atoms';
 import CustomButton from '@/components/CustomButton';
-import { AIAxios } from '@/lib/axios.config';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';

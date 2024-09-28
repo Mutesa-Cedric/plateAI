@@ -31,8 +31,7 @@ model User {
   gender    Gender?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  meals Meal[]
+  meals     Meal[] // Relation field to Meal
 }
 
 model Meal {
@@ -41,7 +40,6 @@ model Meal {
   foodItems Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id]) // Relation field to User
 }

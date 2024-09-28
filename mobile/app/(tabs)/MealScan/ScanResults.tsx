@@ -2,6 +2,7 @@ import { mealBeingScannedState } from '@/atoms';
 import MealLoadingView from '@/components/MealLoadingView';
 import MealScanError from '@/components/MealScanError';
 import MealScanResults from '@/components/ScanResults';
+import useMeals from '@/hooks/useMeals';
 import { AIAxios } from '@/lib/axios.config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -18,6 +19,7 @@ export default function ScanResults() {
     const [error, setError] = useState<string | null>(null);
     const toast = useToast();
     const [results, setResults] = useState<any | null>(null);
+    const { createMeal } = useMeals();
 
     const fetchMealData = async () => {
         try {
@@ -30,6 +32,10 @@ export default function ScanResults() {
             } else {
                 setResults(data);
                 setLoading(false);
+                createMeal({
+                    foodItems: data,
+                    image: mealBeingScanned!.base64,
+                });
             }
         } catch (error) {
             console.log(error)
@@ -65,7 +71,7 @@ export default function ScanResults() {
             }
 
             {
-                error && <MealScanError error={error} />
+                (error && !loading && !results) && <MealScanError error={error} />
             }
             {
                 results && <MealScanResults data={results} />
