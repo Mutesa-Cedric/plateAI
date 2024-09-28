@@ -1,32 +1,7 @@
-import { View, Text, SafeAreaView } from 'react-native'
-import React from 'react'
-import { PieChart } from 'react-native-chart-kit';
-import { Dimensions } from "react-native";
-import Logo from '@/components/Logo';
 import CustomButton from '@/components/CustomButton';
-const data = [
-    {
-        name: "Proteins",
-        population: 25,
-        color: "#4e7ed8",
-        legendFontColor: "black",
-        legendFontSize: 15
-    },
-    {
-        name: "Fats",
-        population: 45,
-        color: "#d28484",
-        legendFontColor: "black",
-        legendFontSize: 15
-    },
-    {
-        name: "carbohydrates",
-        population: 30,
-        color: "#ddbe7b",
-        legendFontColor: "black",
-        legendFontSize: 14
-    },
-];
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { Dimensions, SafeAreaView, Text, View } from 'react-native';
 
 const meals = [
     {
@@ -45,8 +20,8 @@ const meals = [
 
 
 export default function HomeScreen() {
-    const screenWidth = Dimensions.get("window").width;
 
+    const router = useRouter();
 
     return (
         <View className=''>
@@ -83,7 +58,7 @@ export default function HomeScreen() {
                 <Text className='text-lg text-gray-700'>Analyse your first meal</Text>
                 <CustomButton
                     title='Open Camera'
-                    handlePress={() => { }}
+                    handlePress={() => router.push("/NewScan")}
                     containerStyles='mt-4'
                     variant='outline'
                 />
