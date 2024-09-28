@@ -12,7 +12,7 @@ export default function Onboarding() {
   const { activeOnboardingStep } = useOnboarding();
   return (
     <View>
-      {/* {
+      {
         activeOnboardingStep === "get_started" && <GetStarted />
       }
       {
@@ -23,8 +23,8 @@ export default function Onboarding() {
       }
       {
         activeOnboardingStep === "body_scan" && <BodyScan />
-      } */}
-      <NewScan />
+      }
+      {/* <NewScan /> */}
     </View>
   );
 }
