@@ -39,6 +39,13 @@ export default function MealScanLayout() {
                     headerShown: false
                 }}
             />
+            <Stack.Screen
+                name="MealRecommendation"
+                options={{
+                    title: 'Meal Recommendation',
+                    headerShown: false
+                }}
+            />
         </Stack>
     );
 }

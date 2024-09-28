@@ -1,4 +1,5 @@
 import { mealBeingScannedState } from '@/atoms';
+import CustomButton from '@/components/CustomButton';
 import MealLoadingView from '@/components/MealLoadingView';
 import MealScanError from '@/components/MealScanError';
 import MealScanResults from '@/components/ScanResults';
@@ -47,35 +48,48 @@ export default function ScanResults() {
     }, [])
 
     return (
-        <ScrollView>
-            <View className="relative rounded-b-xl">
-                <Image
-                    source={{ uri: mealBeingScanned?.uri }}
-                    className="w-full h-72 rounded-b-xl"
-                />
-                <LinearGradient
-                    colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.6)']}
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        height: '100%',
-                    }}
-                    className="rounded-b-xl"
-                />
-            </View>
+        <View>
+            {results &&
+                <View className='absolute  bottom-4 z-10 px-4 w-full mx-auto items-center'>
+                    <CustomButton
+                        title='See What we recommend'
+                        handlePress={() => router.push("/MealScan/MealRecommendation")}
+                        containerStyles='w-full mx-auto shadow-xl'
+                    />
+                </View>
+            }
+            <ScrollView>
+                <View className="relative rounded-b-xl">
+                    <Image
+                        source={{ uri: mealBeingScanned?.uri }}
+                        className="w-full h-72 rounded-b-xl"
+                    />
+                    <LinearGradient
+                        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.6)']}
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            height: '100%',
+                        }}
+                        className="rounded-b-xl"
+                    />
+                </View>
 
-            {
-                loading && <MealLoadingView />
-            }
+                {
+                    loading && <MealLoadingView />
+                }
 
-            {
-                (error && !loading && !results) && <MealScanError error={error} />
-            }
-            {
-                results && <MealScanResults data={results} />
-            }
-        </ScrollView>
+                {
+                    (error && !loading && !results) && <MealScanError error={error} />
+                }
+                {
+                    results && <MealScanResults data={results} />
+                }
+            </ScrollView>
+
+        </View>
+
     )
 }
