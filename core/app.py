@@ -9,7 +9,7 @@ app.register_blueprint(api)
 endpoints = [
     {
         "endpoint": "/",
-        "description": "Entry point",
+        "description": "Entry Point",
         "method": "GET"
     },
     {
@@ -25,6 +25,11 @@ endpoints = [
     {
         "endpoint": "/diet-check",
         "description": "Diet Check",
+        "method": "POST"
+    },
+    {
+        "endpoint": "/cook-for-me",
+        "description": "Generate Next Meal",
         "method": "POST"
     }
 ]
