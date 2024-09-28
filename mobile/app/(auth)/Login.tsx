@@ -58,6 +58,7 @@ const Login = () => {
                 <CustomButton
                     title='Login'
                     handlePress={handleSubmit}
+                    isLoading={loggingIn}
                     containerStyles='mt-8'
                 />
                 <View className='flex flex-row gap-1 mt-3'>

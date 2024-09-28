@@ -1,14 +1,13 @@
-import { View, Text, ImageBackground } from "react-native";
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
-import useOnboarding from "@/hooks/useOnboarding";
-import CustomButton from "../CustomButton";
-import { useRecoilState } from "recoil";
 import { activeOnboardingStepState } from "@/atoms";
+import { Link } from "expo-router";
+import React from "react";
+import { ImageBackground, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRecoilState } from "recoil";
+import CustomButton from "../CustomButton";
 
 export default function GetStarted() {
-  const [activeOnboardingStep, setActiveOnboardingStep] = useRecoilState(activeOnboardingStepState);
+  const [_, setActiveOnboardingStep] = useRecoilState(activeOnboardingStepState);
 
   return (
     <ImageBackground
@@ -34,10 +33,10 @@ export default function GetStarted() {
               title="Get Started"
             />
           </View>
-          <Text className="text-lg text-white">
+          <Text className="text-lg text-white font-bold">
             Already have an account?{" "}
             <Link href="/Login" push className="ml-10">
-              <Text className="text-primary ">Login</Text>
+              <Text className="text-primary font-bold ">Login</Text>
             </Link>
           </Text>
         </View>
