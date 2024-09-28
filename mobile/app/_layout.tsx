@@ -6,28 +6,27 @@ import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { AuthProvider } from '@/hooks/useAuth';
+import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // const [loaded] = useFonts({
-  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  //   Rubik: require("../assets/fonts/Rubik-Regular.ttf"),
-  //   RubikBold: require("../assets/fonts/Rubik-Bold.ttf"),
-  //   RubikMedium: require("../assets/fonts/Rubik-Medium.ttf"),
-  //   RubikSemibold: require("../assets/fonts/Rubik-SemiBold.ttf"),
-  // });
+  const [loaded] = useFonts({
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    PeachMelon: require('../assets/fonts/PeachMelon-Regular.ttf'),
+  });
 
-  // useEffect(() => {
-  //   if (loaded) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded]);
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
 
-  // if (!loaded) {
-  //   return null;
-  // }
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <ToastProvider>
