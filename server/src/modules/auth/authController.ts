@@ -1,5 +1,6 @@
+import { comparePassword, hashPassword } from "../../utils/bcrypt";
+
 const { PrismaClient } = require('@prisma/client');
-const { hashPassword, comparePassword } = require("../../utils/bcrypt");
 const { generateToken } = require('../../utils/jwt');
 
 const prisma = new PrismaClient();
@@ -46,12 +47,14 @@ export default class AuthController {
     public static async login(req, res) {
         try {
             const { email, password } = req.body;
-
+            console.log(email, password);
             const user = await prisma.user.findUnique({
                 where: {
                     email,
                 },
             });
+
+
             if (!user) {
                 return res.status(401).json({
                     message: "Invalid email or password",
