@@ -20,6 +20,13 @@ const AuthLayout = () => {
                         headerShown: false
                     }}
                 />
+                <Stack.Screen
+                    name='SettingUp'
+                    options={{
+                        title: "Setting Up",
+                        headerShown: false
+                    }}
+                />
             </Stack>
         </>
     )
