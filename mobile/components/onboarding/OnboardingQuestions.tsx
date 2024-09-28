@@ -1,4 +1,3 @@
-import useOnboarding from "@/hooks/useOnboarding";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -7,6 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../CustomButton";
 import { TextInput } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
+import { useRecoilState } from "recoil";
+import { onboardingDataState } from "@/atoms";
 
 const InputField = ({
   label,
@@ -35,12 +36,7 @@ const InputField = ({
 
 export default function OnBoardingQuestions() {
   const router = useRouter();
-  const {
-    activeOnboardingStep,
-    setActiveOnboardingStep,
-    setOnboardingData,
-    onboardingData,
-  } = useOnboarding();
+  const [onboardingData, setOnboardingData] = useRecoilState(onboardingDataState);
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [age, setAge] = useState("");
@@ -58,7 +54,7 @@ export default function OnBoardingQuestions() {
       height: parseInt(height),
       weight: parseInt(weight),
       age: parseInt(age),
-      gender,
+      gender: gender === 1 ? "MALE" : "FEMALE"
     });
     router.push("/Register");
   };

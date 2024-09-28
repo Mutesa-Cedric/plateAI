@@ -1,12 +1,12 @@
-export interface Product {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-}
+
 
 export interface User {
-    id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
+    password: string;
+    age?: number;
+    weight?: number;
+    height?: number;
+    purpose?: "LOSE" | "GAIN" | "MAINTAIN";
 }
