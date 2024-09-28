@@ -13,6 +13,16 @@ export const onboardingDataState = atom<{
     weight?: number,
     height?: number,
 }>({
-    key: 'onboardingData',
+    key: 'OnboardingData',
     default: {}
-})
+});
+
+export const mealBeingScannedState = atom<{
+    base64: string;
+    width: number;
+    height: number;
+    uri: string;
+} | null>({
+    key: 'MealBeingScanned',
+    default: null
+});

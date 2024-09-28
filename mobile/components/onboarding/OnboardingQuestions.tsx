@@ -62,13 +62,13 @@ export default function OnBoardingQuestions() {
   return (
     <SafeAreaView className="bg-orange-100 w-full h-full justify-center items-center">
       <ScrollView className="p-5">
-        <View className="flex flex-row justify-between">
+        {/* <View className="flex flex-row justify-between">
           <Ionicons
             name="chevron-back"
             size={30}
             onPress={() => router.back()}
           />
-        </View>
+        </View> */}
         <View className="flex-1 justify-center items-center">
           <InputField
             label="How tall are you? (cm)"

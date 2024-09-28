@@ -19,7 +19,7 @@ export default function Onboarding() {
       {
         activeOnboardingStep === "onboarding_questions" && <OnboardingQuestions />
       }
-      {/* <NewScan /> */}
+      {/* <Profile /> */}
     </View>
   );
 }

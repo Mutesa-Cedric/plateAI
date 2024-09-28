@@ -5,6 +5,7 @@ from services.kinyarwanda_stt_service import kinyarwanda_speech_to_text
 from services.kinyarwanda_tts_service import kinyarwanda_text_to_speech
 from services.diet_check_service import diet_check
 from services.advisor_service import advisor_service
+from services.cook_meal_service import suggest_next_meal
 
 api = Blueprint('api', __name__)
 
@@ -47,3 +48,16 @@ def advisor():
     analysis = advisor_service(recent_meal, user, past_meals)
 
     return jsonify(analysis)
+
+@api.route('/cook-for-me', methods=['POST'])
+def cook_next_meal():
+    data = request.json
+    user_profile = data.get('user')
+    meal_history = data.get('meal_history')
+
+    if not user_profile or not meal_history:
+        return jsonify({"error": "User profile and meal history are required"}), 400
+
+    meal_res = suggest_next_meal(user_profile, meal_history)
+    
+    return jsonify(meal_res), 200

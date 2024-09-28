@@ -1,4 +1,5 @@
 import { activeOnboardingStepState, onboardingDataState } from "@/atoms";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableHighlight, View } from "react-native";
@@ -18,9 +19,9 @@ export default function Goal() {
 
   return (
     <SafeAreaView className="bg-orange-100 w-[100%] h-[100%] p-5">
-      {/* <View className="flex flex-row justify-between">
-        <Ionicons name="chevron-back" size={30} onPress={() => router.back()} />
-      </View> */}
+      <View className="flex flex-row justify-between">
+        <Ionicons name="chevron-back" size={30} onPress={() => setActiveOnboardingStep("get_started")} />
+      </View>
       <View className="flex-1 grow justify-center items-center">
         <Text className="text-4xl font-[PeachMelon] text-center px-10">
           What goal do you have in mind?
@@ -28,6 +29,7 @@ export default function Goal() {
         <View className="flex w-full items-center gap-5 my-10">
           {goals.map((goal) => (
             <TouchableHighlight
+              key={goal.purpose}
               className={`bg-white/70 p-10 w-[100%] flex items-center justify-center rounded-md shadow-md`}
               onPress={() => {
                 setOnboardingData({ ...onboardingData, purpose: goal.purpose });

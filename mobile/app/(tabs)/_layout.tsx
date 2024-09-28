@@ -12,7 +12,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors['light'].tint,
         headerShown: false,
         tabBarStyle: {
           borderTopWidth: 1,
@@ -38,7 +38,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="NewScan"
+        name="MealScan"
         options={{
           title: '',
           tabBarIcon: ({ focused }) => (
@@ -70,6 +70,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="Profile"
         options={{
