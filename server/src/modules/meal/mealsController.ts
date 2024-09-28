@@ -9,10 +9,17 @@ export default class MealsController {
     public static async createMeal(req: Request, res: Response) {
         try {
             const meal = req.body;
+            const userId = req.body.userId;
 
             const newMeal = await prisma.meal.create({
                 data: {
-                    ...meal,
+                    image: meal.image,
+                    foodItems: meal.foodItems,
+                    user: {
+                        connect: {
+                            id: userId
+                        }
+                    }
                 },
             });
 
