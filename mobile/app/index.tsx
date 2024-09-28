@@ -21,7 +21,6 @@ export default function Onboarding() {
       {
         activeOnboardingStep === "body_scan" && <BodyScan />
       }
-      {/* <Login /> */}
     </View>
   );
 }

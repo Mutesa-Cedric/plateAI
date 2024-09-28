@@ -12,7 +12,7 @@ const CustomInput = ({ label, containerStyles, inputStyles, ...props }: CustomIn
         <View className={`${containerStyles}`}>
             <Text className='text-lg font-medium text-gray-800 pb-1'>{label}</Text>
             <TextInput
-                className={`border py-2 px-2 text-base rounded-md border-gray-500 focus:border-cyan-600 ${inputStyles}`}
+                className={`border-[0.5px] py-2 px-2 text-base rounded-md border-gray-400 focus:border-primary ${inputStyles}`}
                 autoCapitalize='none'
                 {...props}
 
