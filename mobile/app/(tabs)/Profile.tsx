@@ -16,7 +16,6 @@ export const Attribute = ({ label, value }: { label: string; value: any }) => (
 
 export default function Profile() {
   const { user, loggingOut, logout } = useAuth();
-  console.log(user);
   
   return (
     <SafeAreaView className="bg-white h-full">
@@ -33,9 +32,9 @@ export default function Profile() {
         <View className="flex flex-col">
             <Attribute label="Name" value={user?.firstName+ " " + user?.lastName} />
             <Attribute label="Email" value={user?.email} />
-            <Attribute label="Age" value={user?.age} />
-            <Attribute label="Height" value={user?.height} />
-            <Attribute label="Weight" value={user?.weight} />
+            <Attribute label="Age" value={user?.age+ " (years)"} />
+            <Attribute label="Height" value={user?.height+ " (cm)"} />
+            <Attribute label="Weight" value={user?.weight+ " (kg)"} />
         </View>
 
         <CustomButton
