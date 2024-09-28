@@ -1,21 +1,6 @@
 from groq import Groq
-import torch
-from diffusers import FluxPipeline
-from huggingface_hub import login
-import os
-from dotenv import load_dotenv
-import base64
-
-load_dotenv()
-
-login(token=os.environ.get("HUGGINGFACE_KEY"))
 
 client = Groq()
-pipe = FluxPipeline.from_pretrained("black-forest-labs/FLUX.1-dev", torch_dtype=torch.bfloat16)
-pipe.enable_model_cpu_offload()
-
-def encode_image(image_file):
-    return base64.b64encode(image_file.read()).decode('utf-8')
 
 def format_meal_history(meal_history):
     return [
@@ -70,32 +55,6 @@ def format_markdown(markdown_string):
     
     return "\n".join(lines[start_index:])
 
-def formulate_prompt(markdown_res):
-    response = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": f"Based on the following markdown, generate a one-sentence prompt for an image generation model: {markdown_res}. Return only this sentence prompt, no additional commentary."
-            }
-        ]
-    )
-    return response.choices[0].message.content
-
-
-def generate_meal_repr(prompt):
-    image = pipe(
-        prompt,
-        height=1024,
-        width=1024,
-        guidance_scale=3.5,
-        num_inference_steps=50,
-        max_sequence_length=512,
-        generator=torch.Generator("cpu").manual_seed(0)
-    ).images[0]
-
-    image.save("meal_prep.png")
-    return encode_image("meal_prep.png")
-
 def suggest_next_meal(user_profile, meal_history):
     formatted_meal_history = format_meal_history(meal_history)
     prompt = build_prompt(user_profile, formatted_meal_history)
@@ -114,8 +73,5 @@ def suggest_next_meal(user_profile, meal_history):
     response_content = response.choices[0].message.content
 
     fmt_res = format_markdown(response_content)
-    img_prompt = formulate_prompt(fmt_res)
 
-    img_64 = generate_meal_repr(img_prompt)
-
-    return {"response": fmt_res, "meal_image": img_64}
+    return {"response": fmt_res}

@@ -15,7 +15,6 @@ cvzone==1.6.1
 cycler==0.12.1
 db==0.1.1
 db-sqlite3==0.0.1
-diffusers==0.30.3
 distro==1.9.0
 filelock==3.16.1
 Flask==3.0.3
@@ -33,7 +32,6 @@ h11==0.14.0
 h5py==3.11.0
 httpcore==1.0.5
 httpx==0.27.2
-huggingface-hub==0.25.1
 ibm-cloud-sdk-core==3.21.0
 ibm-watson==8.1.0
 idna==3.10
@@ -89,10 +87,10 @@ sympy==1.13.3
 tensorboard==2.16.2
 tensorboard-data-server==0.7.2
 tensorflow==2.16.1
+tensorflow-intel==2.16.1
 tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.4.0
 threadpoolctl==3.5.0
-torch==2.4.1
 tqdm==4.66.4
 typing_extensions==4.12.2
 urllib3==2.2.3

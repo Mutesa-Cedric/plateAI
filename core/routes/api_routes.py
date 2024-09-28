@@ -5,7 +5,7 @@ from services.kinyarwanda_stt_service import kinyarwanda_speech_to_text
 from services.kinyarwanda_tts_service import kinyarwanda_text_to_speech
 from services.diet_check_service import diet_check
 from services.advisor_service import advisor_service
-from services.cook_meal_service import suggest_next_meal
+# from services.cook_meal_service import suggest_next_meal
 
 api = Blueprint('api', __name__)
 

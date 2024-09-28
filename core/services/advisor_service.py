@@ -8,8 +8,9 @@ def get_advice(client, recent_meal, user, past_meals):
         f"We have a user ({user}), analyze this user's recent meal ({recent_meal}) and past meals ({past_meals})."
         f"Give JSON advice for the recent meal with evaluations and suggestions in relation to user's purpose/goal. "
         f"Format: "
-        f"{{'evaluation': 'Evaluation of meal', 'advice': ['List of recommendations']}}. "
+        f"{{'description': 'Don't list components of meal, describe meal based on it's food_item, calories, carbohydrates, proteins, sodium, fats', 'advice': 'recommendations for improving diet like <In order to improve you diet consider doing ...>'}}. "
         f"No explanations or extra text."
+        f"Keep your response strictly in this format."
         f"Please no explanations or extra text, you do it you break everything I built as this is automated, don't even agree with me, just do it."
     )
     
@@ -37,4 +38,5 @@ def retry_json_parsing(advice, retries=10):
 def advisor_service(recent_meal, user, past_meals):
     client = Groq(api_key=Config.GROQ_API_KEY)
     advice = get_advice(client, recent_meal, user, past_meals)
+    print("Advice: ", advice)
     return retry_json_parsing(advice)
