@@ -44,7 +44,8 @@ export default function NewScan() {
             // @ts-ignore
             const photo = await cameraRef.current.takePictureAsync({
                 base64: true,
-                exif: false
+                exif: false,
+                quality: 0.5,
             });
             setCapturedImage(photo);
             console.log(Object.keys(photo));
