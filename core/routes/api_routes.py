@@ -4,6 +4,7 @@ from services.english_tts_service import english_text_to_speech
 from services.kinyarwanda_stt_service import kinyarwanda_speech_to_text
 from services.kinyarwanda_tts_service import kinyarwanda_text_to_speech
 from services.diet_check_service import diet_check
+from services.advisor_service import advisor_service
 
 api = Blueprint('api', __name__)
 
@@ -34,6 +35,15 @@ def stt():
 @api.route('/diet-check', methods=['POST'])
 def diet_checker():
     image = request.json.get("base64")
-    analysis = diet_check(image)
+    ingredients = diet_check(image)
+
+    return jsonify(ingredients)
+
+@api.route('/advisor', methods=['POST'])
+def advisor():
+    recent_meal = request.json.get("recent_meal")
+    user = request.json.get("user")
+    past_meals = request.json.get("past_meals")
+    analysis = advisor_service(recent_meal, user, past_meals)
 
     return jsonify(analysis)
