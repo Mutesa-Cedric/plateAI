@@ -5,7 +5,8 @@ from services.kinyarwanda_stt_service import kinyarwanda_speech_to_text
 from services.kinyarwanda_tts_service import kinyarwanda_text_to_speech
 from services.diet_check_service import diet_check
 from services.advisor_service import advisor_service
-# from services.cook_meal_service import suggest_next_meal
+from services.cook_meal_service import suggest_next_meal
+from services.chat_service import respond_prompt
 
 api = Blueprint('api', __name__)
 
@@ -61,3 +62,11 @@ def cook_next_meal():
     meal_res = suggest_next_meal(user_profile, meal_history)
     
     return jsonify(meal_res), 200
+
+@api.route('/chat', methods=['POST'])
+def ask_qn():
+    prompt_qn = request.json.get("prompt")
+
+    msg_response = respond_prompt(prompt=prompt_qn)
+
+    return msg_response
