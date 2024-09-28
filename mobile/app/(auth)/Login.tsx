@@ -3,13 +3,14 @@ import CustomInput from '@/components/CustomInput'
 import Logo from '@/components/Logo'
 // import useAuth from '@/hooks/useAuth'
 // import { validateEmail, validatePassword } from '@/lib/utils'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useToast } from 'react-native-toast-notifications'
 
 const Login = () => {
+    const router = useRouter();
     const toast = useToast();
     // const { loggingIn, login } = useAuth();
     const [formData, setFormData] = useState({
@@ -58,6 +59,7 @@ const Login = () => {
                 <CustomButton
                     title='Login'
                     handlePress={handleSubmit}
+                    // handlePress={() => router.push("/Home")}
                     containerStyles='mt-8'
                 // isLoading={loggingIn}
                 />
