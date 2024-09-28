@@ -19,47 +19,48 @@ import { Heading, Subheading } from './text'
 
 const testimonials = [
   {
-    img: '/testimonials/tina-yards.jpg',
-    name: 'Tina Yards',
-    title: 'VP of Sales, Protocol',
-    quote:
-      'Thanks to Radiant, we’re finding new leads that we never would have found with legal methods.',
+    img: '/testimonials/jessica-lee.jpg',
+    name: 'Jessica Lee',
+    title: 'Nutritionist and Health Coach',
+    quote: 'This app has transformed my clients eating habits; they now understand their nutrition like never before!',
   },
   {
-    img: '/testimonials/conor-neville.jpg',
-    name: 'Conor Neville',
-    title: 'Head of Customer Success, TaxPal',
+    img: '/testimonials/michael-kim.jpg',
+    name: 'Michael Kim',
+    title: 'Fitness Enthusiast',
     quote:
-      'Radiant made undercutting all of our competitors an absolute breeze.',
+      'I love how easy it is to analyze my meals! The personalized suggestions have made my fitness journey much more effective.',
   },
   {
-    img: '/testimonials/amy-chase.jpg',
-    name: 'Amy Chase',
-    title: 'Head of GTM, Pocket',
+    img: '/testimonials/sarah-connor.jpg',
+    name: 'Sarah Connor',
+    title: 'Busy Professional',
     quote:
-      'We closed a deal in literally a few minutes because we knew their exact budget.',
+      'With this app, I can quickly assess my meals during lunch breaks and make healthier choices effortlessly.',
   },
   {
-    img: '/testimonials/veronica-winton.jpg',
-    name: 'Veronica Winton',
-    title: 'CSO, Planeteria',
+    img: '/testimonials/david-smith.jpg',
+    name: 'David Smith',
+    title: 'Parent and Family Chef',
     quote:
-      'We’ve managed to put two of our main competitors out of business in 6 months.',
+      'Getting my kids to eat healthy is now a breeze! The app helps me create balanced meals they actually enjoy.',
   },
   {
-    img: '/testimonials/dillon-lenora.jpg',
-    name: 'Dillon Lenora',
-    title: 'VP of Sales, Detax',
-    quote: 'I was able to replace 80% of my team with RadiantAI bots.',
+    img: '/testimonials/kimberly-evans.jpg',
+    name: 'Kimberly Evans',
+    title: 'Dietitian',
+    quote:
+      'The AI insights are impressive! It allows me to offer my clients data-driven recommendations based on their eating habits.',
   },
   {
-    img: '/testimonials/harriet-arron.jpg',
-    name: 'Harriet Arron',
-    title: 'Account Manager, Commit',
+    img: '/testimonials/robert-brown.jpg',
+    name: 'Robert Brown',
+    title: 'Health Advocate',
     quote:
-      'I’ve smashed all my targets without having to speak to a lead in months.',
+      'I’ve seen significant improvements in my overall health since using this app to track my meals and nutrition.',
   },
-]
+];
+
 
 function TestimonialCard({
   name,
@@ -156,12 +157,12 @@ function CallToAction() {
   return (
     <div>
       <p className="max-w-sm text-sm/6 text-gray-600">
-        Join the best sellers in the business and start using Radiant to hit
-        your targets today.
+        Unlock personalized meal analysis and dietary insights to improve your
+        nutrition and overall well-being.
       </p>
       <div className="mt-2">
         <Link
-          href="#"
+          href="/register"
           className="inline-flex items-center gap-2 text-sm/6 font-medium text-pink-600"
         >
           Get started

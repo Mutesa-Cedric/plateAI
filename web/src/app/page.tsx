@@ -12,7 +12,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   description:
-    'Radiant helps you sell more by revealing sensitive information about your customers.',
+    'Our AI-powered app analyzes your meals and eating habits, offering personalized dietary suggestions to promote balanced nutrition and a healthier lifestyle.',
 }
 
 function Hero() {
