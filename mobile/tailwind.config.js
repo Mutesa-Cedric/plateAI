@@ -11,6 +11,9 @@ module.exports = {
         rubiksemibold: ['RubikSemibold', 'sans-serif'],
         rubikmedium: ['RubikMedium', 'sans-serif'],
         rubikbold: ['RubikBold', 'sans-serif'],
+      },
+      colors: {
+        primary: "#28785A"
       }
     },
   },

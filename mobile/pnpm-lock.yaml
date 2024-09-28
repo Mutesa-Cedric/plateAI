@@ -4,119 +4,111 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
+dependencies:
+  '@expo/vector-icons':
+    specifier: ^14.0.0
+    version: 14.0.3
+  '@faker-js/faker':
+    specifier: ^8.4.1
+    version: 8.4.1
+  '@react-native-async-storage/async-storage':
+    specifier: ^1.23.1
+    version: 1.24.0(react-native@0.74.2)
+  '@react-navigation/native':
+    specifier: ^6.0.2
+    version: 6.1.18(react-native@0.74.2)(react@18.2.0)
+  axios:
+    specifier: ^1.7.2
+    version: 1.7.7
+  expo:
+    specifier: ~51.0.14
+    version: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
+  expo-constants:
+    specifier: ~16.0.2
+    version: 16.0.2(expo@51.0.34)
+  expo-font:
+    specifier: ~12.0.7
+    version: 12.0.10(expo@51.0.34)
+  expo-linking:
+    specifier: ~6.3.1
+    version: 6.3.1(expo@51.0.34)
+  expo-router:
+    specifier: ~3.5.16
+    version: 3.5.23(expo-constants@16.0.2)(expo-linking@6.3.1)(expo-modules-autolinking@1.11.2)(expo-status-bar@1.12.1)(expo@51.0.34)(react-native-reanimated@3.10.1)(react-native-safe-area-context@4.10.1)(react-native-screens@3.31.1)(react-native@0.74.2)(react@18.2.0)(typescript@5.3.3)
+  expo-splash-screen:
+    specifier: ~0.27.5
+    version: 0.27.6(expo-modules-autolinking@1.11.2)(expo@51.0.34)
+  expo-status-bar:
+    specifier: ~1.12.1
+    version: 1.12.1
+  expo-system-ui:
+    specifier: ~3.0.6
+    version: 3.0.7(expo@51.0.34)
+  expo-web-browser:
+    specifier: ~13.0.3
+    version: 13.0.3(expo@51.0.34)
+  nativewind:
+    specifier: ^2.0.11
+    version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
+  react:
+    specifier: 18.2.0
+    version: 18.2.0
+  react-dom:
+    specifier: 18.2.0
+    version: 18.2.0(react@18.2.0)
+  react-native:
+    specifier: 0.74.2
+    version: 0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.2.79)(react@18.2.0)
+  react-native-gesture-handler:
+    specifier: ~2.16.1
+    version: 2.16.2(react-native@0.74.2)(react@18.2.0)
+  react-native-reanimated:
+    specifier: ~3.10.1
+    version: 3.10.1(@babel/core@7.25.2)(react-native@0.74.2)(react@18.2.0)
+  react-native-safe-area-context:
+    specifier: 4.10.1
+    version: 4.10.1(react-native@0.74.2)(react@18.2.0)
+  react-native-screens:
+    specifier: 3.31.1
+    version: 3.31.1(react-native@0.74.2)(react@18.2.0)
+  react-native-toast-notifications:
+    specifier: ^3.4.0
+    version: 3.4.0(react-native@0.74.2)(react@18.2.0)
+  react-native-web:
+    specifier: ~0.19.10
+    version: 0.19.12(react-dom@18.2.0)(react@18.2.0)
+  swr:
+    specifier: ^2.2.5
+    version: 2.2.5(react@18.2.0)
 
-  .:
-    dependencies:
-      '@expo/vector-icons':
-        specifier: ^14.0.0
-        version: 14.0.3
-      '@faker-js/faker':
-        specifier: ^8.4.1
-        version: 8.4.1
-      '@react-native-async-storage/async-storage':
-        specifier: ^1.23.1
-        version: 1.24.0(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))
-      '@react-native-picker/picker':
-        specifier: ^2.8.1
-        version: 2.8.1(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      '@react-navigation/native':
-        specifier: ^6.0.2
-        version: 6.1.18(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      axios:
-        specifier: ^1.7.2
-        version: 1.7.7
-      expo:
-        specifier: ~51.0.14
-        version: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))
-      expo-constants:
-        specifier: ~16.0.2
-        version: 16.0.2(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
-      expo-font:
-        specifier: ~12.0.7
-        version: 12.0.10(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
-      expo-linking:
-        specifier: ~6.3.1
-        version: 6.3.1(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
-      expo-router:
-        specifier: ~3.5.16
-        version: 3.5.23(64xntbr4736z4bndebdam7ghvy)
-      expo-splash-screen:
-        specifier: ~0.27.5
-        version: 0.27.6(expo-modules-autolinking@1.11.2)(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
-      expo-status-bar:
-        specifier: ~1.12.1
-        version: 1.12.1
-      expo-system-ui:
-        specifier: ~3.0.6
-        version: 3.0.7(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
-      expo-web-browser:
-        specifier: ~13.0.3
-        version: 13.0.3(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
-      nativewind:
-        specifier: ^2.0.11
-        version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-date-picker:
-        specifier: ^11.0.0
-        version: 11.0.0(@types/react@18.2.79)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      react-native:
-        specifier: 0.74.2
-        version: 0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)
-      react-native-gesture-handler:
-        specifier: ~2.16.1
-        version: 2.16.2(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      react-native-reanimated:
-        specifier: ~3.10.1
-        version: 3.10.1(@babel/core@7.25.2)(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      react-native-safe-area-context:
-        specifier: 4.10.1
-        version: 4.10.1(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      react-native-screens:
-        specifier: 3.31.1
-        version: 3.31.1(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      react-native-toast-notifications:
-        specifier: ^3.4.0
-        version: 3.4.0(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
-      react-native-web:
-        specifier: ~0.19.10
-        version: 0.19.12(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      swr:
-        specifier: ^2.2.5
-        version: 2.2.5(react@18.2.0)
-    devDependencies:
-      '@babel/core':
-        specifier: ^7.20.0
-        version: 7.25.2
-      '@types/jest':
-        specifier: ^29.5.12
-        version: 29.5.13
-      '@types/react':
-        specifier: ~18.2.45
-        version: 18.2.79
-      '@types/react-test-renderer':
-        specifier: ^18.0.7
-        version: 18.3.0
-      jest:
-        specifier: ^29.2.1
-        version: 29.7.0(@types/node@22.7.4)
-      jest-expo:
-        specifier: ~51.0.1
-        version: 51.0.4(@babel/core@7.25.2)(jest@29.7.0(@types/node@22.7.4))(react@18.2.0)
-      react-test-renderer:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      tailwindcss:
-        specifier: 3.3.2
-        version: 3.3.2
-      typescript:
-        specifier: ~5.3.3
-        version: 5.3.3
+devDependencies:
+  '@babel/core':
+    specifier: ^7.20.0
+    version: 7.25.2
+  '@types/jest':
+    specifier: ^29.5.12
+    version: 29.5.13
+  '@types/react':
+    specifier: ~18.2.45
+    version: 18.2.79
+  '@types/react-test-renderer':
+    specifier: ^18.0.7
+    version: 18.3.0
+  jest:
+    specifier: ^29.2.1
+    version: 29.7.0
+  jest-expo:
+    specifier: ~51.0.1
+    version: 51.0.4(@babel/core@7.25.2)(jest@29.7.0)(react@18.2.0)
+  react-test-renderer:
+    specifier: 18.2.0
+    version: 18.2.0(react@18.2.0)
+  tailwindcss:
+    specifier: 3.3.2
+    version: 3.3.2
+  typescript:
+    specifier: ~5.3.3
+    version: 5.3.3
 
 packages:
 
@@ -6158,7 +6150,9 @@ snapshots:
     dependencies:
       '@types/hammerjs': 2.0.45
 
-  '@expo/bunyan@4.0.1':
+  /@expo/bunyan@4.0.1:
+    resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
+    engines: {node: '>=0.10.0'}
     dependencies:
       uuid: 8.3.2
 
@@ -7668,7 +7662,8 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  bplist-creator@0.0.7:
+  /bplist-creator@0.0.7:
+    resolution: {integrity: sha512-xp/tcaV3T5PCiaY04mXga7o/TE+t95gqeLmADeBI1CvZtdWTbgBt3uLpvh4UWtenKeBhCV6oVxGk38yZr2uYEA==}
     dependencies:
       stream-buffers: 2.2.0
 
@@ -8003,13 +7998,17 @@ snapshots:
 
   css-mediaquery@0.1.2: {}
 
-  css-to-react-native@3.2.0:
+  /css-to-react-native@3.2.0:
+    resolution: {integrity: sha512-e8RKaLXMOFii+02mOlqwjbD00KSEKqblnpO9e++1aXS1fPQOpS1YoqdVHBqPjHNoxeF2mimzVqawm2KCbEdtHQ==}
     dependencies:
       camelize: 1.0.1
       css-color-keywords: 1.0.0
       postcss-value-parser: 4.2.0
 
-  cssesc@3.0.0: {}
+  /cssesc@3.0.0:
+    resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
+    engines: {node: '>=4'}
+    hasBin: true
 
   cssom@0.3.8: {}
 
@@ -8133,11 +8132,16 @@ snapshots:
 
   dlv@1.1.3: {}
 
-  domexception@4.0.0:
+  /domexception@4.0.0:
+    resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
+    engines: {node: '>=12'}
+    deprecated: Use your platform's native DOMException instead
     dependencies:
       webidl-conversions: 7.0.0
 
-  dotenv-expand@11.0.6:
+  /dotenv-expand@11.0.6:
+    resolution: {integrity: sha512-8NHi73otpWsZGBSZwwknTXS5pqMOrk9+Ssrna8xCaxkzEpU9OTf9R5ArQGVw03//Zmk9MOwLPng9WwndvpAJ5g==}
+    engines: {node: '>=12'}
     dependencies:
       dotenv: 16.4.5
 
@@ -8162,16 +8166,30 @@ snapshots:
   end-of-stream@1.4.4:
     dependencies:
       once: 1.4.0
+    dev: false
 
-  entities@4.5.0: {}
+  /entities@4.5.0:
+    resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
+    engines: {node: '>=0.12'}
+    dev: true
 
-  env-editor@0.4.2: {}
+  /env-editor@0.4.2:
+    resolution: {integrity: sha512-ObFo8v4rQJAE59M69QzwloxPZtd33TpYEIjtKD1rrFDcM1Gd7IkDxEBU+HriziN6HSHQnBJi8Dmy+JWkav5HKA==}
+    engines: {node: '>=8'}
+    dev: false
 
-  envinfo@7.14.0: {}
+  /envinfo@7.14.0:
+    resolution: {integrity: sha512-CO40UI41xDQzhLB1hWyqUKgFhs250pNcGbyGKe1l/e4FSaI/+YE4IMG76GDt0In67WLPACIITC+sOi08x4wIvg==}
+    engines: {node: '>=4'}
+    hasBin: true
+    dev: false
 
-  eol@0.9.1: {}
+  /eol@0.9.1:
+    resolution: {integrity: sha512-Ds/TEoZjwggRoz/Q2O7SE3i4Jm66mqTDfmdHdq/7DKVk3bro9Q8h6WdXKdPqFLMoqxrDK5SVRzHVPOS6uuGtrg==}
+    dev: false
 
-  error-ex@1.3.2:
+  /error-ex@1.3.2:
+    resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
     dependencies:
       is-arrayish: 0.2.1
 
@@ -8326,7 +8344,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  expo-constants@16.0.2(expo@51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))):
+  /expo-constants@16.0.2(expo@51.0.34):
+    resolution: {integrity: sha512-9tNY3OVO0jfiMzl7ngb6IOyR5VFzNoN5OOazUWoeGfmMqVB5kltTemRvKraK9JRbBKIw+SOYLEmF0sEqgFZ6OQ==}
+    peerDependencies:
+      expo: '*'
     dependencies:
       '@expo/config': 9.0.3
       '@expo/env': 0.3.0
@@ -9676,21 +9697,27 @@ snapshots:
       charenc: 0.0.2
       crypt: 0.0.2
       is-buffer: 1.1.6
+    dev: false
 
-  md5hex@1.0.0: {}
+  /md5hex@1.0.0:
+    resolution: {integrity: sha512-c2YOUbp33+6thdCUi34xIyOU/a7bvGKj/3DB1iaPMTuPHf/Q2d5s4sn1FaCOO43XkXggnb08y5W2PU8UNYNLKQ==}
+    dev: false
 
-  mem@8.1.1:
-    dependencies:
-      map-age-cleaner: 0.1.3
-      mimic-fn: 3.1.0
+  /memoize-one@5.2.1:
+    resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
+    dev: false
 
-  memoize-one@5.2.1: {}
+  /memoize-one@6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
+    dev: false
 
-  memoize-one@6.0.0: {}
+  /memory-cache@0.2.0:
+    resolution: {integrity: sha512-OcjA+jzjOYzKmKS6IQVALHLVz+rNTMPoJvCztFaZxwG14wtAW7VRZjwTQu06vKCYOxh4jVnik7ya0SXTB0W+xA==}
+    dev: false
 
-  memory-cache@0.2.0: {}
-
-  merge-options@3.0.4:
+  /merge-options@3.0.4:
+    resolution: {integrity: sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==}
+    engines: {node: '>=10'}
     dependencies:
       is-plain-obj: 2.1.0
 
@@ -10020,7 +10047,9 @@ snapshots:
     dependencies:
       path-key: 3.1.1
 
-  nullthrows@1.1.1: {}
+  /nullthrows@1.1.1:
+    resolution: {integrity: sha512-2vPPEi+Z7WqML2jZYddDIfy5Dqb0r2fze2zTxNNknZaFpVHU3mFB3R+DWeJWGVx0ecvttSGlJTI+WG+8Z4cDWw==}
+    dev: false
 
   nwsapi@2.2.13: {}
 
@@ -10188,7 +10217,8 @@ snapshots:
 
   path-type@4.0.0: {}
 
-  picocolors@1.1.0: {}
+  /picocolors@1.1.0:
+    resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
 
   picomatch@2.3.1: {}
 
@@ -10216,7 +10246,10 @@ snapshots:
 
   pngjs@3.4.0: {}
 
-  possible-typed-array-names@1.0.0: {}
+  /possible-typed-array-names@1.0.0:
+    resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
+    engines: {node: '>= 0.4'}
+    dev: false
 
   postcss-calc@8.2.4(postcss@8.4.47):
     dependencies:
@@ -10411,22 +10444,24 @@ snapshots:
     dependencies:
       detect-element-overflow: 1.4.2
       react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      warning: 4.0.3
-    optionalDependencies:
-      '@types/react': 18.2.79
+    dev: false
 
-  react-freeze@1.0.4(react@18.2.0):
-    dependencies:
-      react: 18.2.0
+  /react-is@16.13.1:
+    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
 
-  react-is@16.13.1: {}
+  /react-is@17.0.2:
+    resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+    dev: false
 
-  react-is@17.0.2: {}
+  /react-is@18.3.1:
+    resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@18.3.1: {}
-
-  react-native-gesture-handler@2.16.2(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0):
+  /react-native-gesture-handler@2.16.2(react-native@0.74.2)(react@18.2.0):
+    resolution: {integrity: sha512-vGFlrDKlmyI+BT+FemqVxmvO7nqxU33cgXVsn6IKAFishvlG3oV2Ds67D5nPkHMea8T+s1IcuMm0bF8ntZtAyg==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
     dependencies:
       '@egjs/hammerjs': 2.0.17
       hoist-non-react-statics: 3.3.2
@@ -10443,7 +10478,12 @@ snapshots:
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
 
-  react-native-reanimated@3.10.1(@babel/core@7.25.2)(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0):
+  /react-native-reanimated@3.10.1(@babel/core@7.25.2)(react-native@0.74.2)(react@18.2.0):
+    resolution: {integrity: sha512-sfxg6vYphrDc/g4jf/7iJ7NRi+26z2+BszPmvmk0Vnrz6FL7HYljJqTf531F1x6tFmsf+FEAmuCtTUIXFLVo9w==}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+      react: '*'
+      react-native: '*'
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-arrow-functions': 7.24.7(@babel/core@7.25.2)
@@ -10471,7 +10511,11 @@ snapshots:
       react-native: 0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)
       warn-once: 0.1.1
 
-  react-native-toast-notifications@3.4.0(react-native@0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0):
+  /react-native-toast-notifications@3.4.0(react-native@0.74.2)(react@18.2.0):
+    resolution: {integrity: sha512-ZvB//jLhRiBRemtcH7vGP1maiKCikqtW4aDqo+QYvEIOcX0y3GrjxRayVAqI4oh0qJgd/26DkbM8COobj+0MEQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
     dependencies:
       react: 18.2.0
       react-native: 0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0)

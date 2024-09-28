@@ -1,5 +1,6 @@
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
+import Logo from '@/components/Logo'
 import useAuth from '@/hooks/useAuth'
 // import { validateEmail } from '@/lib/utils'
 import { Link } from 'expo-router'
@@ -8,7 +9,7 @@ import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useToast } from 'react-native-toast-notifications'
 
-const Signup = () => {
+const Register = () => {
     const toast = useToast();
     const { register, registering } = useAuth();
     const [formData, setFormData] = useState({
@@ -44,13 +45,20 @@ const Signup = () => {
     return (
         <SafeAreaView>
             <View className='h-full  justify-center px-6'>
-                <Text className='text-2xl font-semibold'>Create account</Text>
+                <Logo />
+                <Text className='text-2xl font-semibold pt-2'>Create account</Text>
                 <Text className='text-gray-500 text-base'>Join thousands of other users today.</Text>
-                <View className='w-full mt-10'>
+                <View className='w-full mt-5'>
                     <CustomInput
-                        label='Full Name'
+                        label='First Name'
                         value={formData.name}
                         onChangeText={(val) => setFormData({ ...formData, name: val })}
+                    />
+                    <CustomInput
+                        label='Last Name'
+                        value={formData.name}
+                        onChangeText={(val) => setFormData({ ...formData, name: val })}
+                        containerStyles='mt-3'
                     />
                     <CustomInput
                         label='Email'
@@ -75,7 +83,7 @@ const Signup = () => {
                     <Text className='text-base'>Already have an account?</Text>
                     {/* @ts-ignore */}
                     <Link href={'/login'}>
-                        <Text className='text-cyan-600 text-base'>login</Text>
+                        <Text className='text-primary text-base'>login</Text>
                     </Link>
                 </View>
             </View>
@@ -83,4 +91,4 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default Register

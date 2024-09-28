@@ -3,6 +3,7 @@ from services.english_stt_service import english_speech_to_text
 from services.english_tts_service import english_text_to_speech
 from services.kinyarwanda_stt_service import kinyarwanda_speech_to_text
 from services.kinyarwanda_tts_service import kinyarwanda_text_to_speech
+from services.diet_check_service import diet_check
 
 api = Blueprint('api', __name__)
 
@@ -29,3 +30,11 @@ def stt():
         text = kinyarwanda_speech_to_text(audio_file)
 
     return jsonify({"text": text})
+
+@api.route('/diet-check', methods=['POST'])
+def diet_checker():
+    
+    image = request.files['image']
+    analysis = diet_check(image)
+
+    return jsonify(analysis)

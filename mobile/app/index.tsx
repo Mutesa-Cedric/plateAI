@@ -4,12 +4,15 @@ import Goal from "@/components/onboarding/Goal";
 import OnboardingQuestions from "@/components/onboarding/OnboardingQuestions";
 import useOnboarding from "@/hooks/useOnboarding";
 import { View } from "react-native";
+import HomeScreen from "./(tabs)/Home";
+import Login from "./(auth)/Login";
+import NewScan from "./(tabs)/NewScan";
 
 export default function Onboarding() {
   const { activeOnboardingStep } = useOnboarding();
   return (
     <View>
-      {
+      {/* {
         activeOnboardingStep === "get_started" && <GetStarted />
       }
       {
@@ -20,8 +23,8 @@ export default function Onboarding() {
       }
       {
         activeOnboardingStep === "body_scan" && <BodyScan />
-      }
-      {/* <Login /> */}
+      } */}
+      <NewScan />
     </View>
   );
 }

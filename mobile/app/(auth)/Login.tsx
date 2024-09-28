@@ -1,14 +1,16 @@
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
+import Logo from '@/components/Logo'
 // import useAuth from '@/hooks/useAuth'
 // import { validateEmail, validatePassword } from '@/lib/utils'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useToast } from 'react-native-toast-notifications'
 
 const Login = () => {
+    const router = useRouter();
     const toast = useToast();
     // const { loggingIn, login } = useAuth();
     const [formData, setFormData] = useState({
@@ -36,6 +38,9 @@ const Login = () => {
     return (
         <SafeAreaView>
             <View className='h-full  justify-center px-6'>
+                <View className='pb-2'>
+                    <Logo />
+                </View>
                 <Text className='text-2xl font-semibold'>Login to your account</Text>
                 <Text className='text-gray-500 text-base'>Enter your email and password below</Text>
                 <View className='w-full mt-10'>
@@ -53,15 +58,16 @@ const Login = () => {
                 </View>
                 <CustomButton
                     title='Login'
-                    handlePress={handleSubmit}
+                    // handlePress={handleSubmit}
+                    handlePress={() => router.push("/Home")}
                     containerStyles='mt-8'
                 // isLoading={loggingIn}
                 />
                 <View className='flex flex-row gap-1 mt-3'>
                     <Text className='text-base'>Don't have an account?</Text>
                     {/* @ts-ignore */}
-                    <Link href={'/signup'}>
-                        <Text className='text-cyan-600 text-base'>signup</Text>
+                    <Link href={'/Register'}>
+                        <Text className='text-primary text-base'>signup</Text>
                     </Link>
                 </View>
             </View>
