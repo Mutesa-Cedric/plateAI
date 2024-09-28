@@ -4,6 +4,12 @@ import json
 from datetime import datetime
 from groq import Groq
 
+def load_blacklist(file_path="blacklist.txt"):
+    with open(file_path, "r") as file:
+        return {line.strip().lower() for line in file if line.strip()}
+
+blacklist = load_blacklist()
+
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
@@ -41,7 +47,11 @@ def parse_plain_list(data):
     return [item.strip().strip('"') for item in data.strip('[]').split(', ')]
 
 def unique_items(items):
-    return list(set(items))
+    edible_items = []
+    for item in set(items):
+        if not any(blacklisted_item in item.lower() for blacklisted_item in blacklist):
+            edible_items.append(item)
+    return edible_items
 
 def parse_result(processed_result):
     processed_result = processed_result.strip()
@@ -60,10 +70,7 @@ def get_food_metrics(client, food_items):
     chat_res = client.chat.completions.create(
         messages=[{
             "role": "user",
-            "content": [{
-                "type": "text",
-                "text": prompt
-            }],
+            "content": [{"type": "text", "text": prompt}],
         }],
         model="llava-v1.5-7b-4096-preview",
     )
@@ -75,10 +82,7 @@ def format_metrics_to_json(food_metrics):
     chat_res = client.chat.completions.create(
         messages=[{
             "role": "user",
-            "content": [{
-                "type": "text",
-                "text": prompt
-            }],
+            "content": [{"type": "text", "text": prompt}],
         }],
         model="llama3-70b-8192",
     )
@@ -96,7 +100,7 @@ def extract_json_content(data):
         return json_match.group(0)
     return None
 
-image_path = "sample.png"
+image_path = "sample.jpg"
 base64_image = encode_image(image_path)
 
 client = Groq(api_key="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")
@@ -108,24 +112,27 @@ while retry_count < max_retries:
     result = get_food_items(client, base64_image)
     processed_result = process_result(result)
 
-    if processed_result != "No food content found!":
+    if "No food content found" not in processed_result:
         food_items_list = parse_result(processed_result)
         unique_food_items = unique_items(food_items_list)
 
-        if unique_food_items:
-            food_metrics = get_food_metrics(client, unique_food_items)
-            structured_metrics = format_metrics_to_json(food_metrics)
+        if not unique_food_items:
+            print("No food content found!")
+            break
 
-            json_content = extract_json_content(structured_metrics)
-            if json_content:
-                try:
-                    parsed_json = json.loads(json_content)
-                    save_json_to_file(parsed_json)
-                    print("Food metrics saved to JSON file.")
-                    break
-                except json.JSONDecodeError:
-                    retry_count += 1
-            else:
+        food_metrics = get_food_metrics(client, unique_food_items)
+        structured_metrics = format_metrics_to_json(food_metrics)
+
+        json_content = extract_json_content(structured_metrics)
+        if json_content:
+            try:
+                parsed_json = json.loads(json_content)
+                save_json_to_file(parsed_json)
+                print("Food metrics saved to JSON file.")
+                break
+            except json.JSONDecodeError:
                 retry_count += 1
+        else:
+            retry_count += 1
 
     retry_count += 1
