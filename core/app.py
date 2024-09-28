@@ -33,6 +33,11 @@ endpoints = [
         "method": "POST"
     },
     {
+        "endpoint": "/advisor",
+        "description": "Analysis and Advice",
+        "method": "POST"
+    },
+    {
         "endpoint": "/chat",
         "description": "Chat",
         "method": "POST"
