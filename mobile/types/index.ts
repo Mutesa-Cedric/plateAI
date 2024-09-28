@@ -8,5 +8,6 @@ export interface User {
     age?: number;
     weight?: number;
     height?: number;
+    gender?: string;
     purpose?: "LOSE" | "GAIN" | "MAINTAIN";
 }

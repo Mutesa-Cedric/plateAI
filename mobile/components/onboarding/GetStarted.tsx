@@ -5,6 +5,7 @@ import { ImageBackground, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
 import CustomButton from "../CustomButton";
+import { StatusBar } from "expo-status-bar";
 
 export default function GetStarted() {
   const [_, setActiveOnboardingStep] = useRecoilState(activeOnboardingStepState);
@@ -33,13 +34,16 @@ export default function GetStarted() {
               title="Get Started"
             />
           </View>
-          <Text className="text-lg text-white font-bold">
-            Already have an account?{" "}
-            <Link href="/Login" push className="ml-10">
-              <Text className="text-primary font-bold ">Login</Text>
-            </Link>
-          </Text>
+          <View className="flex items-center">
+            <Text className="text-lg text-white font-bold">
+              Already have an account?{" "}
+              <Link href="/Login" push className="ml-10">
+                <Text className="text-primary font-bold ">Login</Text>
+              </Link>
+            </Text>
+          </View>
         </View>
+        <StatusBar style="light" />
       </SafeAreaView>
     </ImageBackground>
   );
