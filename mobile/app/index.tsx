@@ -6,6 +6,7 @@ import useOnboarding from "@/hooks/useOnboarding";
 import { View } from "react-native";
 import HomeScreen from "./(tabs)/Home";
 import Login from "./(auth)/Login";
+import NewScan from "./(tabs)/NewScan";
 
 export default function Onboarding() {
   const { activeOnboardingStep } = useOnboarding();
@@ -23,7 +24,7 @@ export default function Onboarding() {
       {
         activeOnboardingStep === "body_scan" && <BodyScan />
       } */}
-      <HomeScreen />
+      <NewScan />
     </View>
   );
 }

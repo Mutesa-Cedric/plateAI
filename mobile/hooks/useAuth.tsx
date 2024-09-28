@@ -30,27 +30,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const pathname = usePathname();
 
-    useEffect(() => {
-        if (user) {
-            setInitialLoading(false);
-            return;
-        }
-        const fetchUser = async () => {
-            try {
-                const { data } = await axios.get("/users/me");
-                setUser(data.user);
-            } catch (error) {
-                setUser(null);
-                if (!['/', '/login', '/signup'].includes(pathname)) {
-                    router.push("/Login");
-                }
-            } finally {
-                setInitialLoading(false);
-            }
-        };
-        fetchUser();
-    }
-        , [pathname, user]);
+    // useEffect(() => {
+    //     if (user) {
+    //         setInitialLoading(false);
+    //         return;
+    //     }
+    //     const fetchUser = async () => {
+    //         try {
+    //             const { data } = await axios.get("/users/me");
+    //             setUser(data.user);
+    //         } catch (error) {
+    //             setUser(null);
+    //             if (!['/', '/login', '/signup'].includes(pathname)) {
+    //                 router.push("/Login");
+    //             }
+    //         } finally {
+    //             setInitialLoading(false);
+    //         }
+    //     };
+    //     fetchUser();
+    // }
+    //     , [pathname, user]);
 
     const login = async (email: string, password: string) => {
         setLoggingIn(true);

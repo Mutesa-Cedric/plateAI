@@ -58,8 +58,8 @@ const Login = () => {
                 </View>
                 <CustomButton
                     title='Login'
-                    handlePress={handleSubmit}
-                    // handlePress={() => router.push("/Home")}
+                    // handlePress={handleSubmit}
+                    handlePress={() => router.push("/Home")}
                     containerStyles='mt-8'
                 // isLoading={loggingIn}
                 />
