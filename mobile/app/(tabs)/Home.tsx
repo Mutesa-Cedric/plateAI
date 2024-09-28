@@ -58,7 +58,7 @@ export default function HomeScreen() {
                 <Text className='text-lg text-gray-700'>Analyse your first meal</Text>
                 <CustomButton
                     title='Open Camera'
-                    handlePress={() => router.push("/NewScan")}
+                    handlePress={() => router.push("/MealScan")}
                     containerStyles='mt-4'
                     variant='outline'
                 />

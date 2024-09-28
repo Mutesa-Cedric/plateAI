@@ -1,14 +1,19 @@
+import { mealBeingScannedState } from '@/atoms';
 import CustomButton from '@/components/CustomButton';
 import { AIAxios } from '@/lib/axios.config';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { useRecoilState } from 'recoil';
 
 export default function NewScan() {
     const [permission, requestPermission] = useCameraPermissions();
     const [capturedImage, setCapturedImage] = useState(null);
     const cameraRef = useRef(null);
+    const [_, setMealBeingScanned] = useRecoilState(mealBeingScannedState);
+    const router = useRouter();
 
     if (!permission) {
         // Camera permissions are still loading
@@ -53,8 +58,10 @@ export default function NewScan() {
     const useImage = async () => {
         // Handle using the image (e.g., send to server, save locally, etc.)
         try {
-            const { data } = await AIAxios.post("/diet-check", capturedImage);
-            console.log(data)
+            // const { data } = await AIAxios.post("/diet-check", capturedImage);
+            // console.log(data)
+            setMealBeingScanned(capturedImage);
+            router.push("/MealScan/ScanResults");
         } catch (error) {
             console.log(error);
         }
