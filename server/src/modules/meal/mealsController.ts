@@ -42,7 +42,14 @@ export default class MealsController {
             const meals = await prisma.meal.findMany({
                 where: {
                     userId
-                }
+                },
+                select: {
+                    id: true,
+                    image: true,
+                    foodItems: true,
+                    createdAt: true
+                },
+                take: 4
             });
 
             res.status(200).json({
