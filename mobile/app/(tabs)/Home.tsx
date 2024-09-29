@@ -1,27 +1,53 @@
 import CustomButton from '@/components/CustomButton';
+import useMeals from '@/hooks/useMeals';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Dimensions, SafeAreaView, Text, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { SafeAreaView, Text, View } from 'react-native';
 
-const meals = [
-    {
-        name: "Proteins",
-        percentage: 25,
-    },
-    {
-        name: "Fats",
-        percentage: 45,
-    },
-    {
-        name: "Carbs",
-        percentage: 30,
-    },
-]
 
 
 export default function HomeScreen() {
-
+    const { meals } = useMeals();
     const router = useRouter();
+
+
+    const stats = useMemo(() => {
+        // Initialize totals
+        let totalCalories = 0;
+        let totalProteins = 0;
+        let totalFats = 0;
+        let totalCarbs = 0;
+
+        // Loop through each meal and sum the nutrients
+        meals?.forEach(meal => {
+            meal?.foodItems?.forEach(foodItem => {
+                totalCalories += parseFloat(foodItem.calories) || 0; // Fallback to 0 if invalid
+                totalProteins += parseFloat(foodItem.proteins) || 0; // Fallback to 0 if invalid
+                totalFats += parseFloat(foodItem.fats) || 0; // Fallback to 0 if invalid
+                totalCarbs += parseFloat(foodItem.carbohydrates) || 0; // Fallback to 0 if invalid
+            });
+        });
+
+        // Total grams of all macronutrients
+        const totalGrams = totalProteins + totalFats + totalCarbs;
+
+        // Calculate percentage of each macronutrient
+        const percentages = {
+            proteins: totalGrams > 0 ? ((totalProteins / totalGrams) * 100).toFixed(1) : 0,
+            fats: totalGrams > 0 ? ((totalFats / totalGrams) * 100).toFixed(1) : 0,
+            carbs: totalGrams > 0 ? ((totalCarbs / totalGrams) * 100).toFixed(1) : 0,
+        };
+
+        return {
+            totalCalories,
+            breakdown: [
+                { name: 'Proteins', percentage: percentages.proteins },
+                { name: 'Fats', percentage: percentages.fats },
+                { name: 'Carbs', percentage: percentages.carbs },
+            ]
+        };
+    }, [meals]);
+
 
     return (
         <View className=''>
@@ -36,12 +62,12 @@ export default function HomeScreen() {
                     <View className='w-full px-4'>
                         <View className='bg-white p-4 rounded shadow mt-4'>
                             <Text className='text-lg font-semibold'>Total Calories</Text>
-                            <Text className='text-gray-500 text-sm'>1300 Kcal</Text>
+                            <Text className='text-gray-500 text-sm'>{stats.totalCalories.toFixed(1)} KCal</Text>
                         </View>
                     </View>
                     <View className='flex-row px-2 w-full'>
                         {
-                            meals.map((meal, index) => (
+                            stats.breakdown.map((meal, index) => (
                                 <View key={index} className='w-1/3'>
                                     <View className='bg-white p-4 rounded shadow mt-4 mx-2'>
                                         <Text className='text-lg font-semibold'>{meal.name}</Text>

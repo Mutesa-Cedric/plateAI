@@ -26,12 +26,18 @@ dependencies:
   expo:
     specifier: ~51.0.14
     version: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
+  expo-av:
+    specifier: ^14.0.7
+    version: 14.0.7(expo@51.0.34)
   expo-camera:
     specifier: ^15.0.16
     version: 15.0.16(expo@51.0.34)
   expo-constants:
     specifier: ~16.0.2
     version: 16.0.2(expo@51.0.34)
+  expo-file-system:
+    specifier: ^17.0.1
+    version: 17.0.1(expo@51.0.34)
   expo-font:
     specifier: ~12.0.7
     version: 12.0.10(expo@51.0.34)
@@ -71,6 +77,9 @@ dependencies:
   react-native:
     specifier: 0.74.2
     version: 0.74.2(@babel/core@7.25.2)(@babel/preset-env@7.25.4)(@types/react@18.2.79)(react@18.2.0)
+  react-native-animatable:
+    specifier: ^1.4.0
+    version: 1.4.0
   react-native-chart-kit:
     specifier: ^6.12.0
     version: 6.12.0(react-native-svg@15.7.1)(react-native@0.74.2)(react@18.2.0)
@@ -4964,6 +4973,14 @@ packages:
       - supports-color
     dev: false
 
+  /expo-av@14.0.7(expo@51.0.34):
+    resolution: {integrity: sha512-FvKZxyy+2/qcCmp+e1GTK3s4zH8ZO1RfjpqNxh7ARlS1oH8HPtk1AyZAMo52tHz3yQ3UIqxQ2YbI9CFb4065lA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 51.0.34(@babel/core@7.25.2)(@babel/preset-env@7.25.4)
+    dev: false
+
   /expo-camera@15.0.16(expo@51.0.34):
     resolution: {integrity: sha512-FLE02DMqkjwsb7IugKAqQvBe6s+TCQeb5LupO1+r//wAhBwmHncOrc6zV95ZEC2f9PTPK34nFH/s8CDGiVzIAA==}
     peerDependencies:
@@ -8331,6 +8348,12 @@ packages:
 
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
+
+  /react-native-animatable@1.4.0:
+    resolution: {integrity: sha512-DZwaDVWm2NBvBxf7I0wXKXLKb/TxDnkV53sWhCvei1pRyTX3MVFpkvdYBknNBqPrxYuAIlPxEp7gJOidIauUkw==}
+    dependencies:
+      prop-types: 15.8.1
+    dev: false
 
   /react-native-chart-kit@6.12.0(react-native-svg@15.7.1)(react-native@0.74.2)(react@18.2.0):
     resolution: {integrity: sha512-nZLGyCFzZ7zmX0KjYeeSV1HKuPhl1wOMlTAqa0JhlyW62qV/1ZPXHgT8o9s8mkFaGxdqbspOeuaa6I9jUQDgnA==}
