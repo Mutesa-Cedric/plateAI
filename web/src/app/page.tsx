@@ -32,9 +32,9 @@ function Hero() {
 
           <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
             <Button href="/register">Get started</Button>
-            <Button variant="secondary" href="#download">
+            {/* <Button variant="secondary" href="#download">
               Download the app
-            </Button>
+            </Button> */}
           </div>
         </div>
       </Container>
@@ -123,29 +123,29 @@ function BentoSection() {
   )
 }
 
-function DarkBentoSection() {
-  return (
-    <div
-      id='download'
-      className="mx-2 mt-2 rounded-4xl bg-gray-900 py-32">
-      <Container
-        className='flex flex-col items-center justify-center w-full'
-      >
-        <Subheading dark className='text-center'>download</Subheading>
-        <Heading as="h3" dark className="mt-2 max-w-3xl text-center">
-          Scan the QR code to download the app.
-        </Heading>
+// function DarkBentoSection() {
+//   return (
+//     <div
+//       id='download'
+//       className="mx-2 mt-2 rounded-4xl bg-gray-900 py-32">
+//       <Container
+//         className='flex flex-col items-center justify-center w-full'
+//       >
+//         <Subheading dark className='text-center'>download</Subheading>
+//         <Heading as="h3" dark className="mt-2 max-w-3xl text-center">
+//           Scan the QR code to download the app.
+//         </Heading>
 
-        <Screenshot
-          src={'/qr-code.png'}
-          width={256}
-          height={256}
-          className='w-[30rem] h-[20rem] mx-auto mt-8'
-        />
-      </Container>
-    </div>
-  )
-}
+//         <Screenshot
+//           src={'/qr-code.png'}
+//           width={256}
+//           height={256}
+//           className='w-[30rem] h-[20rem] mx-auto mt-8'
+//         />
+//       </Container>
+//     </div>
+//   )
+// }
 
 export default function Home() {
   return (
@@ -156,7 +156,7 @@ export default function Home() {
           <FeatureSection />
           <BentoSection />
         </div>
-        <DarkBentoSection />
+        {/* <DarkBentoSection /> */}
       </main>
       {/* <Testimonials /> */}
       <Footer />

@@ -12,8 +12,8 @@ import Logo from './logo'
 import { PlusGrid, PlusGridItem, PlusGridRow } from './plus-grid'
 
 const links = [
-  { href: '/login', label: 'Login' },
-  { href: '#download', label: 'Download App' },
+  { href: '/register', label: 'Get Started' },
+  // { href: '#download', label: 'Download App' },
 ]
 
 function DesktopNav() {

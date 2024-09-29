@@ -9,6 +9,7 @@ import useAuth from '@/hooks/useAuth'
 import { Field, Input, Label } from '@headlessui/react'
 import { clsx } from 'clsx'
 import Head from 'next/head'
+import React from 'react'
 
 export default function Register() {
 
@@ -112,12 +113,12 @@ export default function Register() {
                                 </Button>
                             </div>
                         </form>
-                        <div className="m-1.5 rounded-lg bg-gray-50 py-4 text-center text-sm/5 ring-1 ring-black/5">
+                        {/* <div className="m-1.5 rounded-lg bg-gray-50 py-4 text-center text-sm/5 ring-1 ring-black/5">
                             Already a member?{' '}
                             <Link href="/login" className="font-medium hover:text-gray-600">
                                 Login
                             </Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </main>

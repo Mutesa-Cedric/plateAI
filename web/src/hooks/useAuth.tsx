@@ -30,9 +30,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const { data } = await axios.post("/auth/login", { email, password });
             setUser(data.user);
             toast.success("Logged in successfully");
-            setTimeout(() => {
-                router.push("/download");
-            }, 500)
+            // setTimeout(() => {
+            //     router.push("/download");
+            // }, 500)
         } catch (error: any) {
             console.error(error);
             if (error.response?.status === 401) {
@@ -51,9 +51,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const { data } = await axios.post("/auth/register", newUser);
             setUser(data.user);
             toast.success("Registered successfully");
-            setTimeout(() => {
-                router.push("/download");
-            }, 500)
+            // setTimeout(() => {
+            //     router.push("/download");
+            // }, 500)
         } catch (error: any) {
             console.error(error);
             if (error.response?.status === 400) {
