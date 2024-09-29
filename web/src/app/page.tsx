@@ -50,7 +50,7 @@ function FeatureSection() {
           A snapshot of your PlateAI Journey.
         </Heading>
         <Screenshot
-          width={1216}
+          width={1024}
           height={768}
           src="/screenshots/desktop.png"
           className="mt-16 h-[36rem] sm:h-auto sm:w-[76rem]"
