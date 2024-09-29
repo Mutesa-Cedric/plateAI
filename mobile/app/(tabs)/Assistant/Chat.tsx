@@ -57,7 +57,7 @@ export default function Chat() {
                     </View>
                 ))}
             </ScrollView>
-            <View className='flex-row p-4'>
+            <View className='flex-row p-4 pb-0'>
                 <View className='flex-1 mr-2'>
                     <TextInput
                         value={message}

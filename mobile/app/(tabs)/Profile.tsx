@@ -6,9 +6,9 @@ import { ScrollView } from "react-native-gesture-handler";
 
 
 export const Attribute = ({ label, value }: { label: string; value: any }) => (
-  <View className="flex flex-col justify-between items-left my-2 w-full">
-    <Text className="text-xl text-green-600 font-bold">{label}</Text>
-    <View className="border-b w-full border-gray-400 my-1 py-2">
+  <View className="flex flex-col justify-between items-left  w-full mb-1">
+    <Text className="text-lg text-primary font-bold">{label}</Text>
+    <View className="border-b w-full border-gray-400 pb-2">
       <Text className="text-lg  w-full text-left mt-2">{value}</Text>
     </View>
   </View>
@@ -23,8 +23,8 @@ export default function Profile() {
         <Image
           source={user?.gender === "MALE" ? require("@/assets/images/m.png") : require("@/assets/images/f.png")}
           style={{
-            width: 200,
-            height: 200,
+            width: 150,
+            height: 150,
             alignSelf: "center",
             marginTop: 20,
           }}

@@ -70,7 +70,7 @@ export default function HomeScreen() {
                             stats.breakdown.map((meal, index) => (
                                 <View key={index} className='w-1/3'>
                                     <View className='bg-white p-4 rounded shadow mt-4 mx-2'>
-                                        <Text className='text-lg font-semibold'>{meal.name}</Text>
+                                        <Text className='text-base font-semibold'>{meal.name}</Text>
                                         <Text className='text-gray-500 text-sm'>{meal.percentage}%</Text>
                                     </View>
                                 </View>
