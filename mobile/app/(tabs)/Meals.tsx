@@ -69,11 +69,16 @@ export default function Meals() {
           <FlatList
             data={meals}
             renderItem={({ item }) => <MealCard {...item} />}
-            keyExtractor={(item, idx) => idx.toString()}
+            keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <View className="h-0.5 bg-gray-200 mx-4" />
             )}
             showsVerticalScrollIndicator={false}
+            getItemLayout={(_, index) => ({
+              length: 100,
+              offset: 100 * index,
+              index,
+            })}
           />
         ) : (
           <Text className="text-center text-xl text-gray-500">No meals analysed yet</Text>
