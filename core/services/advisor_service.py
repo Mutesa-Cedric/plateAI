@@ -27,7 +27,7 @@ def get_advice(client, recent_meal, user, past_meals):
     
     chat_res = client.chat.completions.create(
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
-        model="llama3-8b-8192"
+        model="llama-3.1-8b-instant"
     )
     
     return chat_res.choices[0].message.content.strip()
