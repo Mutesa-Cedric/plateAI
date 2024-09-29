@@ -29,7 +29,7 @@ export default function HomeScreen() {
                 <SafeAreaView>
                     <View className='pl-4'>
                         {/* <Logo theme='light' /> */}
-                        <Text className='text-xl text-white font-semibold'>
+                        <Text className='text-4xl text-center font-[PeachMelon] py-2 text-white font-semibold'>
                             Weekly Report
                         </Text>
                     </View>
