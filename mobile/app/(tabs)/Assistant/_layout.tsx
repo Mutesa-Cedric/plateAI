@@ -39,13 +39,13 @@ export default function AssistantLayout() {
                     headerShown: false
                 }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="Voice"
                 options={{
                     title: 'Voice',
                     headerShown: false
                 }}
-            />
+            /> */}
         </Stack>
     );
 }

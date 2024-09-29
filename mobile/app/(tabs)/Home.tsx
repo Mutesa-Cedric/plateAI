@@ -1,13 +1,16 @@
+import { mealsState } from '@/atoms';
 import CustomButton from '@/components/CustomButton';
 import useMeals from '@/hooks/useMeals';
 import { useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
+import { useRecoilValue } from 'recoil';
 
 
 
 export default function HomeScreen() {
-    const { meals } = useMeals();
+    const { loading } = useMeals();
+    const meals = useRecoilValue(mealsState);
     const router = useRouter();
 
 
@@ -62,7 +65,9 @@ export default function HomeScreen() {
                     <View className='w-full px-4'>
                         <View className='bg-white p-4 rounded shadow mt-4'>
                             <Text className='text-lg font-semibold'>Total Calories</Text>
-                            <Text className='text-gray-500 text-sm'>{stats.totalCalories.toFixed(1)} KCal</Text>
+                            {loading ?
+                                <ActivityIndicator size='small' color='#28785A' /> :
+                                <Text className='text-gray-500 text-sm'>{stats.totalCalories.toFixed(1)} KCal</Text>}
                         </View>
                     </View>
                     <View className='flex-row px-2 w-full'>
@@ -70,8 +75,10 @@ export default function HomeScreen() {
                             stats.breakdown.map((meal, index) => (
                                 <View key={index} className='w-1/3'>
                                     <View className='bg-white p-4 rounded shadow mt-4 mx-2'>
-                                        <Text className='text-lg font-semibold'>{meal.name}</Text>
-                                        <Text className='text-gray-500 text-sm'>{meal.percentage}%</Text>
+                                        <Text className='text-base font-semibold'>{meal.name}</Text>
+                                        {loading ?
+                                            <ActivityIndicator size='small' color='#28785A' /> :
+                                            <Text className='text-gray-500 text-sm'>{meal.percentage}%</Text>}
                                     </View>
                                 </View>
                             ))

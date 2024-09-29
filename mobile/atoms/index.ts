@@ -1,3 +1,4 @@
+import { Meal } from '@/types';
 import { atom } from 'recoil';
 
 export const activeOnboardingStepState = atom<"get_started" | "goal" | "onboarding_questions">({
@@ -32,4 +33,9 @@ export const mostRecentMealState = atom<{
 } | null>({
     key: 'MostRecentMeal',
     default: null
+});
+
+export const mealsState = atom<Meal[]>({
+    key: 'Meals',
+    default: []
 });

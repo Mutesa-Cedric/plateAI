@@ -4,22 +4,32 @@ import useAuth from "./useAuth";
 import { useEffect, useState } from "react";
 import { Meal } from "@/types";
 import { useRecoilState } from "recoil";
-import { mostRecentMealState } from "@/atoms";
+import { mealsState, mostRecentMealState } from "@/atoms";
 
 export default function useMeals() {
     const { user } = useAuth();
+    const [meals, setMeals] = useRecoilState(mealsState);
     const [creatingMeal, setCreatingMeal] = useState(false);
     const [_, setMostRecentMeal] = useRecoilState(mostRecentMealState);
+    const [loading, setLoading] = useState(false);
 
-    const { data: meals, error, mutate } = useSWR("/meals", async () => {
-        if (!user) return [];
-        const { data } = await axios.get(`/meals/by-user/${user?.id}`);
-        return data.meals as Meal[];
-    });
+    async function fetchMeals() {
+        try {
+            setLoading(true);
+            if (!user) return;
+            const { data } = await axios.get(`/meals/by-user/${user.id}`);
+            setMeals(data.meals);
+        } catch (error) {
+            console.log(error);
+            setMeals([]);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
         if (!user) return;
-        mutate();
+        fetchMeals();
     }, [user]);
 
     const createMeal = async (meal: Partial<Meal>) => {
@@ -29,7 +39,7 @@ export default function useMeals() {
                 ...meal,
                 userId: user?.id,
             });
-            mutate([...meals ?? [], data.meal], false);
+            setMeals([...meals, data.meal]);
             setMostRecentMeal(data.meal);
         } catch (error) {
             console.log(error);
@@ -41,9 +51,9 @@ export default function useMeals() {
 
     return {
         meals,
-        loading: !meals && !error,
         createMeal,
         creatingMeal,
+        loading,
     };
 
 }

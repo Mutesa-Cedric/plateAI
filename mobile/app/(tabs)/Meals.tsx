@@ -4,13 +4,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import useMeals from "@/hooks/useMeals";
 import { Meal } from "@/types";
+import { useRecoilValue } from "recoil";
+import { mealsState } from "@/atoms";
 
 export const Measurement = ({
   name,
   value,
 }: {
   name: string;
-  value: number;
+  value: number | string;
 }) => {
   return (
     <View className="flex px-2 items-center justify-between">
@@ -35,10 +37,18 @@ export const MealCard = ({
       <View className="grow px-2">
         {/* <Text className="text-xl text-green-700 font-bold">{name}</Text> */}
         <View className="flex flex-row items-center justify-between mt-2">
-          <Measurement name="Cal" value={foodItems[0].calories} />
-          <Measurement name="Protein" value={foodItems[0].proteins} />
-          <Measurement name="Carbs" value={foodItems[0].carbohydrates} />
-          <Measurement name="Fat" value={foodItems[0].fats} />
+          <Measurement name="Cal" value={
+            foodItems.reduce((acc, item) => acc + parseFloat(item.calories), 0).toFixed(1)
+          } />
+          <Measurement name="Protein" value={
+            foodItems.reduce((acc, item) => acc + parseFloat(item.proteins), 0).toFixed(1)
+          } />
+          <Measurement name="Carbs" value={
+            foodItems.reduce((acc, item) => acc + parseFloat(item.carbohydrates), 0).toFixed(1)
+          } />
+          <Measurement name="Fat" value={
+            foodItems.reduce((acc, item) => acc + parseFloat(item.fats), 0).toFixed(1)
+          } />
         </View>
       </View>
     </View>
@@ -46,26 +56,29 @@ export const MealCard = ({
 };
 
 export default function Meals() {
-  const { meals, loading } = useMeals();
-  
+  const { loading } = useMeals();
+  const meals = useRecoilValue(mealsState);
+
   return (
     <SafeAreaView>
       <Text className="text-6xl font-[PeachMelon] text-center py-5">Meals</Text>
       <View className="px-2 overflow-hidden">
-      { loading ? (
-        <ActivityIndicator size="large" color="#28785A" />
-      ) : (
-         <FlatList
-          data={meals}
-          renderItem={({ item }) => <MealCard {...item} />}
-          keyExtractor={(item, idx) => idx.toString()}
-          ItemSeparatorComponent={() => (
-            <View className="h-0.5 bg-gray-200 mx-4" />
-          )}
-          showsVerticalScrollIndicator={false}
-        />
-      )
-      }
+        {(loading && meals.length === 0) ? (
+          <ActivityIndicator size="large" color="#28785A" />
+        ) : (meals && meals?.length > 0) ? (
+          <FlatList
+            data={meals}
+            renderItem={({ item }) => <MealCard {...item} />}
+            keyExtractor={(item, idx) => idx.toString()}
+            ItemSeparatorComponent={() => (
+              <View className="h-0.5 bg-gray-200 mx-4" />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <Text className="text-center text-xl text-gray-500">No meals analysed yet</Text>
+        )
+        }
       </View>
     </SafeAreaView>
   );
