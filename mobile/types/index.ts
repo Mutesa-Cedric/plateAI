@@ -17,11 +17,11 @@ export interface User {
 export interface FoodItem {
     id: string;
     foodItem: string;
-    calories: number;
-    carbohydrates: number;
-    fats: number;
-    proteins: number;
-    sodium: number;
+    calories: string;
+    carbohydrates: string;
+    fats: string;
+    proteins: string;
+    sodium: string;
     createdAt: Date;
     updatedAt: Date;
 }
