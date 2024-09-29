@@ -1,13 +1,13 @@
-import { Ionicons } from "@expo/vector-icons";
+import { activeOnboardingStepState, onboardingDataState } from "@/atoms";
+import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../CustomButton";
 import { TextInput } from "react-native-gesture-handler";
-import { Picker } from "@react-native-picker/picker";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
-import { onboardingDataState } from "@/atoms";
+import CustomButton from "../CustomButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const InputField = ({
   label,
@@ -20,12 +20,12 @@ const InputField = ({
   onChangeText: (input: string) => void;
   placeholder?: string;
 }) => (
-  <View className="w-full flex gap-4 my-3">
-    <Text className="text-2xl font-[PeachMelon] text-center px-10">
+  <View className="w-full flex gap-2 my-1">
+    <Text className="text-xl text-center px-10">
       {label}
     </Text>
     <TextInput
-      className="border w-full py-4 text-center flex justify-center items-center text-xl rounded-md border-gray-500 focus:border-cyan-600"
+      className="border w-full py-2 text-center flex justify-center items-center text-xl rounded-md border-gray-500 focus:border-cyan-600"
       keyboardType="numeric"
       value={value}
       placeholder={placeholder}
@@ -37,10 +37,11 @@ const InputField = ({
 export default function OnBoardingQuestions() {
   const router = useRouter();
   const [onboardingData, setOnboardingData] = useRecoilState(onboardingDataState);
+  const [onboardingStep, setOnboardingStep] = useRecoilState(activeOnboardingStepState);
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [age, setAge] = useState("");
-  const [gender, setGender] = useState<1 | 2 | undefined>(undefined);
+  const [gender, setGender] = useState<"MALE" | "FEMALE" | undefined>(undefined);
 
   const handleNumericInput =
     (setter: (val: string) => void) => (input: string) => {
@@ -54,7 +55,7 @@ export default function OnBoardingQuestions() {
       height: parseInt(height),
       weight: parseInt(weight),
       age: parseInt(age),
-      gender: gender === 1 ? "MALE" : "FEMALE"
+      gender: gender
     });
     router.push("/Register");
   };
@@ -62,14 +63,14 @@ export default function OnBoardingQuestions() {
   return (
     <SafeAreaView className="bg-orange-100 w-full h-full justify-center items-center">
       <ScrollView className="p-5">
-        {/* <View className="flex flex-row justify-between">
+        <View className="flex flex-row justify-between">
           <Ionicons
             name="chevron-back"
             size={30}
-            onPress={() => router.back()}
+            onPress={() => setOnboardingStep("goal")}
           />
-        </View> */}
-        <View className="flex-1 justify-center items-center">
+        </View>
+        <View className="justify-center items-center">
           <InputField
             label="How tall are you? (cm)"
             value={height}
@@ -87,7 +88,7 @@ export default function OnBoardingQuestions() {
           />
 
           <View className="w-full flex my-2">
-            <Text className="text-2xl font-[PeachMelon] text-center px-10">
+            <Text className="text-2xl text-center px-10">
               What gender are you?
             </Text>
             <View>
@@ -98,7 +99,7 @@ export default function OnBoardingQuestions() {
                 >
                   <View className="border w-full py-4 text-center flex justify-center items-center rounded-md border-gray-500 focus:border-cyan-600">
                     <Text className="text-xl">
-                      {gender === 1 ? "Male" : "Female"}
+                      {gender === "MALE" ? "Male" : "Female"}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -108,8 +109,8 @@ export default function OnBoardingQuestions() {
                   onValueChange={(itemValue) => setGender(itemValue)}
                 >
                   <Picker.Item label="Select gender" value="" />
-                  <Picker.Item label="Male" value="1" />
-                  <Picker.Item label="Female" value="2" />
+                  <Picker.Item label="Male" value="MALE" />
+                  <Picker.Item label="Female" value="FEMALE" />
                 </Picker>
               )}
             </View>
