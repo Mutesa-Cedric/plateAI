@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
+import CustomButton from './CustomButton';
 
 const NutritionItem = ({ label, value, unit }: any) => (
     <View className="w-1/2 mb-2">
@@ -32,8 +33,8 @@ export default function MealScanResults({ data }: any) {
 
     return (
         <View className="p-4 bg-gray-100">
+            
             <Text className="text-2xl font-bold mb-4 text-gray-800">Meal Analysis Results</Text>
-
             <View className="bg-white rounded-lg p-4 mb-4 shadow">
                 <Text className="text-xl font-bold mb-2 text-green-700">Total Nutrition</Text>
                 <View className="flex-row flex-wrap">
@@ -51,6 +52,7 @@ export default function MealScanResults({ data }: any) {
                 renderItem={({ item }) => <FoodItem item={item} />}
                 keyExtractor={(item) => item.food_item}
             />
+
         </View>
     );
 }

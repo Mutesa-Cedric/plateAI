@@ -3,12 +3,15 @@ import axios from "@/lib/axios.config";
 import useAuth from "./useAuth";
 import { useEffect, useState } from "react";
 import { Meal } from "@/types";
+import { useRecoilState } from "recoil";
+import { mostRecentMealState } from "@/atoms";
 
 export default function useMeals() {
     const { user } = useAuth();
     const [creatingMeal, setCreatingMeal] = useState(false);
+    const [_, setMostRecentMeal] = useRecoilState(mostRecentMealState);
 
-    const { data, error, mutate } = useSWR("/meals", async () => {
+    const { data: meals, error, mutate } = useSWR("/meals", async () => {
         if (!user) return [];
         const { data } = await axios.get(`/meals/by-user/${user?.id}`);
         return data.meals as Meal[];
@@ -26,8 +29,8 @@ export default function useMeals() {
                 ...meal,
                 userId: user?.id,
             });
-            console.log(data);
-            mutate([...data.meals, meal], false);
+            mutate([...meals ?? [], data.meal], false);
+            setMostRecentMeal(data.meal);
         } catch (error) {
             console.log(error);
         } finally {
@@ -37,8 +40,8 @@ export default function useMeals() {
 
 
     return {
-        meals: data,
-        loading: !data && !error,
+        meals,
+        loading: !meals && !error,
         createMeal,
         creatingMeal,
     };
