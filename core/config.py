@@ -14,3 +14,4 @@ class Config:
     GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 
     DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # Convert to boolean
+    AUDIO_FOLDER = os.environ.get('AUDIO_FOLDER', '../audio')

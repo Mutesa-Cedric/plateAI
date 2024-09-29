@@ -7,6 +7,7 @@ from services.diet_check_service import diet_check
 from services.advisor_service import advisor_service
 from services.cook_meal_service import suggest_next_meal
 from services.chat_service import respond_prompt
+from flask import send_from_directory
 
 api = Blueprint('api', __name__)
 
@@ -16,8 +17,9 @@ def tts():
     text = request.json.get('text')
 
     if language == 'en':
-        audio_content = english_text_to_speech(text)
-        return audio_content
+        filename = english_text_to_speech(text)
+        audio_url = f"http://157.173.127.185:5000/audio/{filename}"
+        return {"audio_url": audio_url}
     elif language == 'rw':
         res = kinyarwanda_text_to_speech(text)
         return res
@@ -70,3 +72,11 @@ def ask_qn():
     msg_response = respond_prompt(prompt=prompt_qn)
 
     return msg_response
+
+# Route to serve the audio files
+@api.route('/audio/<filename>')
+def serve_audio(filename):
+    return send_from_directory("../audio", filename)
+
+if __name__ == '__main__':
+    app.run(debug=True)
