@@ -47,12 +47,12 @@ function FeatureSection() {
     <div className="overflow-hidden">
       <Container className="pb-24">
         <Heading as="h2" className="max-w-3xl">
-          A snapshot of your entire sales pipeline.
+          A snapshot of your PlateAI Journey.
         </Heading>
         <Screenshot
-          width={1216}
+          width={1024}
           height={768}
-          src="/screenshots/app.png"
+          src="/screenshots/desktop.png"
           className="mt-16 h-[36rem] sm:h-auto sm:w-[76rem]"
         />
       </Container>
@@ -65,24 +65,24 @@ function BentoSection() {
     <Container>
       <Subheading>Sales</Subheading>
       <Heading as="h3" className="mt-2 max-w-3xl">
-        Know more about your customers than they do.
+        Know more about your diet every step of the way.
       </Heading>
 
       <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
         <BentoCard
           eyebrow="Insight"
-          title="Get perfect clarity"
-          description="Radiant uses social engineering to build a detailed financial picture of your leads. Know their budget, compensation package, social security number, and more."
-          graphic={
-            <div className="h-80 bg-[url(/screenshots/profile.png)] bg-[size:1000px_560px] bg-[left_-109px_top_-112px] bg-no-repeat" />
-          }
+          title="Use image recognition to find your meal"
+          description="Plate AI allows users to upload images or videos of their meals, which the AI will analyze to assess nutrient content and determine whether the meal is balanced."
+          // graphic={
+          //   <div className="h-80 bg-[url(/screenshots/profile.png)] bg-[size:1000px_560px] bg-[left_-109px_top_-112px] bg-no-repeat" />
+          // }
           fade={['bottom']}
           className="max-lg:rounded-t-4xl lg:col-span-3 lg:rounded-tl-4xl"
         />
         <BentoCard
           eyebrow="Analysis"
-          title="Undercut your competitors"
-          description="With our advanced data mining, you’ll know which companies your leads are talking to and exactly how much they’re being charged."
+          title="Nutrient Analysis & Diet Suggestions"
+          description="Our service provides feedback on the nutrient balance of the meal and offers personalized suggestions on what to add, remove, or modify to improve the meal's nutritional value."
           graphic={
             <div className="absolute inset-0 bg-[url(/screenshots/competitors.png)] bg-[size:1100px_650px] bg-[left_-38px_top_-73px] bg-no-repeat" />
           }
@@ -91,8 +91,8 @@ function BentoSection() {
         />
         <BentoCard
           eyebrow="Speed"
-          title="Built for power users"
-          description="It’s never been faster to cold email your entire contact list using our streamlined keyboard shortcuts."
+          title="Get Audio Assistance"
+          description="Our AI provides interactive audio feedback, enabling users to discuss their meal choices, receive real-time guidance, and make informed dietary decisions."
           graphic={
             <div className="flex size-full pl-10 pt-10">
               <Keyboard highlighted={['LeftCommand', 'LeftShift', 'D']} />
@@ -102,17 +102,19 @@ function BentoSection() {
         />
         <BentoCard
           eyebrow="Source"
-          title="Get the furthest reach"
-          description="Bypass those inconvenient privacy laws to source leads from the most unexpected places."
-          graphic={<div className="flex size-full pl-10 pt-10">
-            <Keyboard highlighted={['LeftCommand', 'LeftShift', 'D']} />
-          </div>}
+          title="Get Daily Eating Habits Analytics"
+          description="Our app tracks and analyzes users' eating habits over time, identifying patterns and providing tailored advice to improve overall dietary behavior"
+          graphic={
+            <div className="flex size-full pl-10 pt-10">
+              <Keyboard highlighted={['LeftCommand', 'LeftShift', 'D']} />
+            </div>
+          }
           className="lg:col-span-2"
         />
         <BentoCard
           eyebrow="Limitless"
-          title="Sell globally"
-          description="Radiant helps you sell in locations currently under international embargo."
+          title="Maintain your weight"
+          description="Plate AI offers a comprehensive analysis of your daily meals, providing insights into your eating habits to achieve your weight goals."
           graphic={<Map />}
           className="max-lg:rounded-b-4xl lg:col-span-2 lg:rounded-br-4xl"
         />

@@ -63,7 +63,7 @@ export default function Chat() {
                         value={message}
                         onChangeText={setMessage}
                         placeholder='Type a message'
-                        className='border-2 border-gray-300 p-2 rounded-lg'
+                        className='border-2 bg-white border-gray-300 p-2 rounded-lg'
                     />
                 </View>
                 <TouchableOpacity onPress={sendMessage} disabled={loading} className='bg-primary p-2 rounded-lg'>
