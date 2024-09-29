@@ -5,11 +5,11 @@ import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router';
 
 const capabilities = [
-    {
-        name: "Voice Assistant",
-        icon: "mic",
-        href: "/Assistant/Voice"
-    },
+    // {
+    //     name: "Voice Assistant",
+    //     icon: "mic",
+    //     href: "/Assistant/Voice"
+    // },
     {
         name: "Chat Assistant",
         icon: "chatbubbles",
