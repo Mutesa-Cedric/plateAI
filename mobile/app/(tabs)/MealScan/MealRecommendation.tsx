@@ -8,6 +8,10 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useRecoilValue } from 'recoil';
+import { Audio } from 'expo-av';
+import * as Permissions from 'expo-permissions'; // This may not be needed in the latest Expo versions
+import CustomButton from '@/components/CustomButton';
+
 
 export default function MealRecommendation() {
     const { user } = useAuth();
@@ -17,13 +21,43 @@ export default function MealRecommendation() {
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState<string | null>(null);
     const [showSpeaker, setShowSpeaker] = useState(false);
-    const [speech, setSpeech] = useState<any | null>(null);
+    const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
+    const playAudio = async () => {
+        if (audioUrl) {
+            try {
+                await Audio.setIsEnabledAsync(true);
+                const { sound } = await Audio.Sound.createAsync({ uri: audioUrl });
+                setSound(sound);
+                await sound.playAsync();
+            } catch (error) {
+                console.log("Error playing audio:", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        async function initAudio() {
+            try {
+                await Audio.setAudioModeAsync({
+                    playsInSilentModeIOS: true,
+                    staysActiveInBackground: true,
+                    shouldDuckAndroid: true,
+                });
+            } catch (error) {
+                console.log("Error initializing audio:", error);
+            }
+        }
+        initAudio();
+    }, []);
 
     const fetchMealData = async () => {
         try {
             const { data } = await AIAxios.post("/advisor", {
-                recent_meal: mostRecentMeal,
+                recent_meal: {
+                    foodItems: mostRecentMeal?.foodItems,
+                },
                 past_meals: meals?.map(meal => meal.foodItems),
                 user
             });
@@ -42,21 +76,36 @@ export default function MealRecommendation() {
     const getSpeech = async () => {
         try {
             const { data } = await AIAxios.post("/tts?language=en", {
-                // text: result
-                text: "Hello, I am your AI nutritionist. I have analyzed your meal and I recommend you to eat more fruits and vegetables. You can also try to reduce the amount of sugar in your diet. Remember to drink a lot of water."
+                text: result
             });
-            console.log(data);
+            console.log(data.audio_url);
+            setAudioUrl(data.audio_url);
         } catch (error) {
             console.log(error)
         }
     }
 
     useEffect(() => {
-        if (showSpeaker && !speech) {
+        if (showSpeaker && !audioUrl) {
             getSpeech();
         }
     }
         , [showSpeaker])
+
+    useEffect(() => {
+        if (audioUrl && showSpeaker) {
+            playAudio();
+        }
+    }, [audioUrl, showSpeaker]);
+
+    // Clean up the audio when the component unmounts or when a new sound is loaded
+    useEffect(() => {
+        return sound
+            ? () => {
+                sound.unloadAsync();
+            }
+            : undefined;
+    }, [sound]);
 
     React.useEffect(() => {
         fetchMealData();
@@ -70,12 +119,12 @@ export default function MealRecommendation() {
                         onPress={() => router.push("/MealScan/ScanResults")}>
                         <Ionicons name="arrow-back" size={24} color="black" />
                     </TouchableOpacity>
-                    {/* <TouchableOpacity
+                    <TouchableOpacity
                         onPress={() => setShowSpeaker(true)}
                         disabled={loading}
                         className='bg-primary  p-2 rounded-full '>
                         <Ionicons name="mic" size={28} color="white" />
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                 </View>
                 <View className=''>
                     <Text className='text-lg font-semibold'>What our AI says about your meal</Text>
@@ -89,6 +138,24 @@ export default function MealRecommendation() {
                         >
                             <Text className='text-sm font-medium text-gray-800'>{result}</Text>
                         </View>
+
+                        <View className='pt-6'>
+                            <Text className='text-lg font-semibold text-center mt-4'>Got any questions?</Text>
+                            <View className='justify-center mt-4'>
+                                <CustomButton
+                                    title='Chat with AI'
+                                    handlePress={() => router.push("/Assistant/Chat")}
+                                    variant='outline'
+                                    containerStyles='mb-4'
+
+                                />
+                                <CustomButton
+                                    title='Cook with AI'
+                                    handlePress={() => router.push("/Assistant/Cook")}
+                                    variant='outline'
+                                />
+                            </View>
+                        </View>
                     </ScrollView>
                 )
             }
@@ -98,6 +165,9 @@ export default function MealRecommendation() {
                         <ActivityIndicator size="large" color="#28785A" />
                     </View>
                 )
+            }
+            {
+
             }
             <Modal
                 animationType="slide"

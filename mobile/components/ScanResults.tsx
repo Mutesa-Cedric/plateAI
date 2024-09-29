@@ -33,7 +33,7 @@ export default function MealScanResults({ data }: any) {
 
     return (
         <View className="p-4 bg-gray-100">
-            
+
             <Text className="text-2xl font-bold mb-4 text-gray-800">Meal Analysis Results</Text>
             <View className="bg-white rounded-lg p-4 mb-4 shadow">
                 <Text className="text-xl font-bold mb-2 text-green-700">Total Nutrition</Text>
@@ -50,7 +50,10 @@ export default function MealScanResults({ data }: any) {
             <FlatList
                 data={data}
                 renderItem={({ item }) => <FoodItem item={item} />}
-                keyExtractor={(item) => item.food_item}
+                keyExtractor={(item,idx) => idx.toString()}
+                getItemLayout={(data, index) => (
+                    { length: 100, offset: 100 * index, index }
+                )}
             />
 
         </View>

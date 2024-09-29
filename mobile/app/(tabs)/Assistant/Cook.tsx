@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, Image } from 'react-native'
+import { View, Text, ActivityIndicator, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AIAxios } from '@/lib/axios.config'
@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { mealsState } from '@/atoms';
 import { ScrollView } from 'react-native-gesture-handler';
 import MarkDown from "react-native-markdown-display";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Cook() {
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -40,9 +41,16 @@ export default function Cook() {
             <ScrollView>
 
                 <View className='px-4 pt-4'>
-                    <Text className='text-xl font-semibold'>
-                        AI Chef
-                    </Text>
+                    <View className='flex-row justify-between'>
+                        <Text className='text-xl font-semibold'>
+                            AI Chef
+                        </Text>
+                        <TouchableOpacity
+                            onPress={cook}
+                            className='bg-gray-50 p-2 rounded-md'>
+                            <Ionicons name='reload' size={24} color='#28785A' />
+                        </TouchableOpacity>
+                    </View>
                     <Text className='font-medium'>
                         Cook with our state-of-the-art AI model which knows what you have to eat next
                     </Text>
