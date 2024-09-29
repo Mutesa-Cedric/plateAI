@@ -18,7 +18,7 @@ export function BentoCard({
   eyebrow: React.ReactNode
   title: React.ReactNode
   description: React.ReactNode
-  graphic: React.ReactNode
+  graphic?: React.ReactNode
   fade?: ('top' | 'bottom')[]
 }) {
   return (
@@ -34,7 +34,7 @@ export function BentoCard({
         'data-[dark]:bg-gray-800 data-[dark]:ring-white/15',
       )}
     >
-      <div className="relative h-80 shrink-0">
+      {/* <div className="relative shrink-0">
         {graphic}
         {fade.includes('top') && (
           <div className="absolute inset-0 bg-gradient-to-b from-white to-50% group-data-[dark]:from-gray-800 group-data-[dark]:from-[-25%]" />
@@ -42,7 +42,7 @@ export function BentoCard({
         {fade.includes('bottom') && (
           <div className="absolute inset-0 bg-gradient-to-t from-white to-50% group-data-[dark]:from-gray-800 group-data-[dark]:from-[-25%]" />
         )}
-      </div>
+      </div> */}
       <div className="relative p-10">
         <Subheading as="h3" dark={dark}>
           {eyebrow}

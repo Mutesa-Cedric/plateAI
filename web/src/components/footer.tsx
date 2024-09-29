@@ -14,7 +14,7 @@ function CallToAction() {
           Ready to transform your diet?
 
           <br />
-          Start your free trial today.
+          Start your journey today.
         </p>
       </hgroup>
       <p className="mx-auto mt-6 max-w-xs text-sm/6 text-gray-500">
