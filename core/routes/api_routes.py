@@ -17,7 +17,7 @@ def tts():
 
     if language == 'en':
         audio_content = english_text_to_speech(text)
-        return {"blob": audio_content}
+        return audio_content
     elif language == 'rw':
         res = kinyarwanda_text_to_speech(text)
         return res
