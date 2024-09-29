@@ -25,17 +25,16 @@ export const Measurement = ({
 export const MealCard = ({
   foodItems,
   image,
-  createdAt,
 }: Meal) => {
   return (
-    <View className="px-4 flex flex-row justify-start py-4">
+    <View className="px-4 flex flex-row items-center justify-center py-4">
       <Image
         source={{ uri: `data:image/jpeg;base64,${image}` }}
         className="w-24 h-24 rounded-full bg-center bg-contain"
       />
       <View className="grow px-2">
         {/* <Text className="text-xl text-green-700 font-bold">{name}</Text> */}
-        <View className="flex flex-row items-start justify-between mt-2">
+        <View className="flex flex-row items-center justify-between mt-2">
           <Measurement name="Cal" value={foodItems[0].calories} />
           <Measurement name="Protein" value={foodItems[0].proteins} />
           <Measurement name="Carbs" value={foodItems[0].carbohydrates} />
@@ -48,9 +47,6 @@ export const MealCard = ({
 
 export default function Meals() {
   const { meals, loading } = useMeals();
-  if (meals) {
-    console.log(meals[0].foodItems);
-  }
   
   return (
     <SafeAreaView>
