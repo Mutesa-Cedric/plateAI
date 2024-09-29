@@ -17,7 +17,7 @@ def tts():
 
     if language == 'en':
         audio_content = english_text_to_speech(text)
-        return Response(audio_content, mimetype='audio/mp3', headers={'Content-Disposition': 'attachment; filename=speech.mp3'})
+        return {"blob": audio_content}
     elif language == 'rw':
         res = kinyarwanda_text_to_speech(text)
         return res
