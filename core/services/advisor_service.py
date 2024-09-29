@@ -12,12 +12,7 @@ def get_description(client, recent_meal, user, past_meals):
     
     chat_res = client.chat.completions.create(
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
-        model="llama3-8b-8192",
-        temperature=0.7,
-        max_tokens=1024,
-        top_p=1,
-        stop=None,
-        stream=False,
+        model="gemma2-9b-it"
     )
     
     return chat_res.choices[0].message.content.strip()
@@ -32,12 +27,7 @@ def get_advice(client, recent_meal, user, past_meals):
     
     chat_res = client.chat.completions.create(
         messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
-        model="llama3-8b-8192",
-        temperature=0.7,
-        max_tokens=1024,
-        top_p=1,
-        stop=None,
-        stream=False,
+        model="gemma2-9b-it"
     )
     
     return chat_res.choices[0].message.content.strip()
