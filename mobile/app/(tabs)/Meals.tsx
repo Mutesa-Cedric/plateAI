@@ -4,6 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import useMeals from "@/hooks/useMeals";
 import { Meal } from "@/types";
+import { useRecoilValue } from "recoil";
+import { mealsState } from "@/atoms";
 
 export const Measurement = ({
   name,
@@ -54,13 +56,14 @@ export const MealCard = ({
 };
 
 export default function Meals() {
-  const { meals, loading } = useMeals();
+  const { loading } = useMeals();
+  const meals = useRecoilValue(mealsState);
 
   return (
     <SafeAreaView>
       <Text className="text-6xl font-[PeachMelon] text-center py-5">Meals</Text>
       <View className="px-2 overflow-hidden">
-        {loading ? (
+        {(loading && meals.length === 0) ? (
           <ActivityIndicator size="large" color="#28785A" />
         ) : (meals && meals?.length > 0) ? (
           <FlatList
