@@ -1,16 +1,15 @@
 import { mostRecentMealState } from '@/atoms';
+import CustomButton from '@/components/CustomButton';
 import useAuth from '@/hooks/useAuth';
 import useMeals from '@/hooks/useMeals';
 import { AIAxios } from '@/lib/axios.config';
 import { Ionicons } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useRecoilValue } from 'recoil';
-import { Audio } from 'expo-av';
-import * as Permissions from 'expo-permissions'; // This may not be needed in the latest Expo versions
-import CustomButton from '@/components/CustomButton';
 
 
 export default function MealRecommendation() {

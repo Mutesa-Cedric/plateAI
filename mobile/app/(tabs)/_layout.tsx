@@ -29,11 +29,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Meals"
+        name="Metrics"
         options={{
-          title: 'Meals',
+          title: 'Metrics',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'restaurant' : 'restaurant-outline'} color={color} />
+            <TabBarIcon name={focused ? "stats-chart" : "stats-chart-outline"} color={color} />
           ),
         }}
       />

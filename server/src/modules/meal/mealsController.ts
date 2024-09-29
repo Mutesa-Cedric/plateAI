@@ -45,11 +45,10 @@ export default class MealsController {
                 },
                 select: {
                     id: true,
-                    image: true,
                     foodItems: true,
-                    createdAt: true
+                    createdAt: true,
+                    updatedAt: true,
                 },
-                take: 4
             });
 
             res.status(200).json({
