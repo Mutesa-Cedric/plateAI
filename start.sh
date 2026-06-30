@@ -41,8 +41,7 @@ tag_output() {
     cd "$REPO_ROOT/core"
     # shellcheck source=/dev/null
     source venv/bin/activate
-    # Load .env into the Flask process environment
-    set -a; source .env; set +a
+    # config.py calls load_dotenv() — no need to source .env here.
     exec python app.py
 ) 2>&1 | tag_output "core" "$BLUE" &
 CORE_PIPE_PID=$!

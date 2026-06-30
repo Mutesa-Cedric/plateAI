@@ -93,35 +93,26 @@ if [[ -z "$DB_URL" || "$DB_URL" == file:* ]]; then
 elif [[ "$DB_URL" == postgresql://* || "$DB_URL" == postgres://* ]]; then
     info "DATABASE_URL is PostgreSQL — checking connectivity..."
 
-    POSTGRES_OK=false
+    # Verify connectivity only when pg_isready is available.
+    # If it's not installed, trust the URL — Prisma will report a clear
+    # connection error if PostgreSQL is actually unreachable.
     if command -v pg_isready &>/dev/null; then
         if pg_isready -d "$DB_URL" -q 2>/dev/null; then
-            POSTGRES_OK=true
-        fi
-    else
-        # pg_isready not available; try a quick node connection test
-        if node -e "
-const { Client } = require('pg');
-const c = new Client({ connectionString: process.env.DATABASE_URL });
-c.connect().then(() => { c.end(); process.exit(0); }).catch(() => process.exit(1));
-" 2>/dev/null; then
-            POSTGRES_OK=true
-        fi
-    fi
-
-    if [ "$POSTGRES_OK" = true ]; then
-        ok "PostgreSQL is reachable — using schema.prisma."
-        SCHEMA_ARG=""
-    else
-        warn "PostgreSQL is not reachable. Falling back to SQLite."
-        warn "Update DATABASE_URL in server/.env when PostgreSQL is ready, then re-run setup.sh."
-        # Overwrite DATABASE_URL in .env with SQLite path
-        if [[ "$(uname)" == "Darwin" ]]; then
-            sed -i '' 's|^DATABASE_URL=.*|DATABASE_URL=file:./dev.db|' .env
+            ok "PostgreSQL is reachable — using schema.prisma."
         else
-            sed -i    's|^DATABASE_URL=.*|DATABASE_URL=file:./dev.db|' .env
+            warn "pg_isready reports PostgreSQL is not reachable."
+            warn "Check your DATABASE_URL and that PostgreSQL is running, then re-run setup.sh."
+            warn "Falling back to SQLite for now."
+            if [[ "$(uname)" == "Darwin" ]]; then
+                sed -i '' 's|^DATABASE_URL=.*|DATABASE_URL=file:./dev.db|' .env
+            else
+                sed -i    's|^DATABASE_URL=.*|DATABASE_URL=file:./dev.db|' .env
+            fi
+            SCHEMA_ARG="--schema prisma/schema.sqlite.prisma"
         fi
-        SCHEMA_ARG="--schema prisma/schema.sqlite.prisma"
+    else
+        ok "pg_isready not found — trusting DATABASE_URL and proceeding with PostgreSQL schema."
+        ok "Prisma will fail with a clear error if the connection is wrong."
     fi
 else
     warn "Unrecognised DATABASE_URL format — defaulting to SQLite."
