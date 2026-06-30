@@ -1,5 +1,14 @@
 # PlateAI: AI-Powered Meal Analysis App - Your AI Dietitian
 
+## Getting Started
+
+```bash
+./setup.sh   # install dependencies, configure database, seed data (run once)
+./start.sh   # start core and server (run each time)
+```
+
+See [SETUP.md](./SETUP.md) for the full setup guide, environment variable reference, SQLite/PostgreSQL switching, and troubleshooting.
+
 An AI-powered mobile and web application designed to analyze meals through images and videos. Our app assesses nutrient balance and offers personalized dietary suggestions to help users achieve their health goals.
 
 ## Features

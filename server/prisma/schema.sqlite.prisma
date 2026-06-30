@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// SQLite (Prisma 5) does not support enum or Json types.
+// - Enums  → String  (values are still validated at the app layer: LOSE|GAIN|MAINTAIN, MALE|FEMALE)
+// - Json   → String  (store with JSON.stringify, parse with JSON.parse)
+// The PostgreSQL schema (schema.prisma) uses the native enum and Json types.
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  age       Int?
+  weight    Float?
+  height    Float?
+  purpose   String?
+  gender    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  meals     Meal[]
+}
+
+model Meal {
+  id        String   @id @default(cuid())
+  image     String
+  foodItems String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "userId")
+}

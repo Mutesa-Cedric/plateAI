@@ -1,1 +1,18 @@
 /audio
+.logs/
+
+# Python
+core/venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment files (keep .env.example files)
+core/.env
+server/.env
+
+# SQLite database (local dev only)
+server/prisma/dev.db
+
+# macOS
+.DS_Store

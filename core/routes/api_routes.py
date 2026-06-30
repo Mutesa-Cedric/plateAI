@@ -11,6 +11,10 @@ from flask import send_from_directory
 
 api = Blueprint('api', __name__)
 
+@api.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "ok", "service": "core"})
+
 @api.route('/tts', methods=['POST'])
 def tts():
     language = request.args.get('language', 'en')

@@ -42,3 +42,7 @@ app.use("/meals", mealsRouter);
 app.get("/", (req, res) => {
     res.send("Hello world");
 });
+
+app.get("/health", (req, res) => {
+    res.json({ status: "ok", service: "server" });
+});

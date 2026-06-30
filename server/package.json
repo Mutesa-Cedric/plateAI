@@ -4,9 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon  src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/src/server.js"
+    "start": "node dist/src/server.js",
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "npm run seed"
   },
   "dependencies": {
     "@prisma/client": "5.17.0",
@@ -28,6 +32,7 @@
     "@types/node": "^18.15.3",
     "nodemon": "^2.0.15",
     "prisma": "5.17.0",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.2"
   }
