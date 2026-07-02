@@ -1,15 +1,18 @@
-import requests
+"""Kinyarwanda speech-to-text via Pindo — in-memory only."""
 from io import BytesIO
+import requests
 
 url = "https://api.pindo.io/v1/transcription/stt"
-data = {
-    "lang": "rw"
-}
 
-# "wav", "wave", "mp3", "ogg", "flac", "aac", "wma", "webm", "mp4", "m4a"
-def kinyarwanda_speech_to_text(audio_file):
+
+def kinyarwanda_speech_to_text(
+    audio_bytes: bytes,
+    content_type: str = "audio/wav",
+    filename: str = "audio.wav",
+) -> str:
     files = {
-        'audio': (audio_file.filename, BytesIO(audio_file.read()), audio_file.mimetype)
+        "audio": (filename or "audio.wav", BytesIO(audio_bytes), content_type or "audio/wav")
     }
-    response = requests.post(url, files=files, data=data)
-    return response.json()['text']
+    response = requests.post(url, files=files, data={"lang": "rw"})
+    response.raise_for_status()
+    return response.json()["text"]

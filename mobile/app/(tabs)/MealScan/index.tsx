@@ -58,7 +58,7 @@ export default function NewScan() {
     const useImage = async () => {
         // Handle using the image (e.g., send to server, save locally, etc.)
         try {
-            // const { data } = await AIAxios.post("/diet-check", capturedImage);
+            // const { data } = await axios.post("/ai/diet-check", capturedImage);
             // console.log(data)
             setMealBeingScanned(capturedImage);
             router.push("/MealScan/ScanResults");

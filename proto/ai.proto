@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package plateai.ai;
+
+// Internal-only AI service. Clients must never call this directly;
+// only the app server (Express) is an allowed peer.
+
+service PlateAI {
+  // Liveness for the AI worker.
+  rpc Health (HealthRequest) returns (HealthResponse);
+
+  // Vision + nutrition pipeline (unary JSON payload).
+  rpc DietCheck (DietCheckRequest) returns (DietCheckResponse);
+
+  // Short dietary advice from profile + history.
+  rpc Advisor (AdvisorRequest) returns (AdvisorResponse);
+
+  // Next-meal suggestion (markdown + optional image).
+  rpc CookForMe (CookForMeRequest) returns (CookForMeResponse);
+
+  // Dietitian chat turn.
+  rpc Chat (ChatRequest) returns (ChatResponse);
+
+  // Client streams audio bytes (optionally after a config frame);
+  // server returns a single transcript when the stream ends.
+  // No disk I/O — audio is processed in memory.
+  rpc SpeechToText (stream SttClientMessage) returns (SttResponse);
+
+  // Server streams synthesized audio bytes for the given text.
+  // No disk I/O — audio is produced and forwarded on the fly.
+  rpc TextToSpeech (TtsRequest) returns (stream AudioChunk);
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  string status = 1;
+  string service = 2;
+}
+
+message DietCheckRequest {
+  // Raw image bytes (JPEG/PNG). Prefer over base64 for gRPC.
+  bytes image = 1;
+  // Optional base64 fallback (legacy mobile payloads).
+  string base64 = 2;
+}
+
+message DietCheckResponse {
+  // JSON array/object of food metrics, or error object, as UTF-8 JSON text.
+  string result_json = 1;
+}
+
+message AdvisorRequest {
+  // JSON-encoded recent meal, user profile, and past meals (flexible shapes).
+  string recent_meal_json = 1;
+  string user_json = 2;
+  string past_meals_json = 3;
+}
+
+message AdvisorResponse {
+  string advice = 1;
+}
+
+message CookForMeRequest {
+  string user_json = 1;
+  string meal_history_json = 2;
+}
+
+message CookForMeResponse {
+  string response = 1;
+  string image = 2;
+}
+
+message ChatRequest {
+  string prompt = 1;
+}
+
+message ChatResponse {
+  string response = 1;
+}
+
+// First client message should be `config`; subsequent messages carry `audio`.
+message SttClientMessage {
+  oneof payload {
+    SttConfig config = 1;
+    bytes audio = 2;
+  }
+}
+
+message SttConfig {
+  // "en" (default) or "rw"
+  string language = 1;
+  // e.g. "audio/wav", "audio/mp3", "audio/webm"
+  string content_type = 2;
+  // Original filename hint for third-party APIs (optional).
+  string filename = 3;
+}
+
+message SttResponse {
+  string text = 1;
+}
+
+message TtsRequest {
+  string text = 1;
+  // "en" (default) or "rw"
+  string language = 2;
+}
+
+message AudioChunk {
+  bytes data = 1;
+  // e.g. "audio/mpeg" — set on first chunk when known
+  string content_type = 2;
+}

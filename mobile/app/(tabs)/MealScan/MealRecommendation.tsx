@@ -2,7 +2,7 @@ import { mostRecentMealState } from '@/atoms';
 import CustomButton from '@/components/CustomButton';
 import useAuth from '@/hooks/useAuth';
 import useMeals from '@/hooks/useMeals';
-import { AIAxios } from '@/lib/axios.config';
+import axios from '@/lib/axios.config';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
@@ -53,7 +53,7 @@ export default function MealRecommendation() {
 
     const fetchMealData = async () => {
         try {
-            const { data } = await AIAxios.post("/advisor", {
+            const { data } = await axios.post("/ai/advisor", {
                 recent_meal: {
                     foodItems: mostRecentMeal?.foodItems,
                 },
@@ -74,11 +74,25 @@ export default function MealRecommendation() {
 
     const getSpeech = async () => {
         try {
-            const { data } = await AIAxios.post("/tts?language=en", {
-                text: result
-            });
-            console.log(data.audio_url);
-            setAudioUrl(data.audio_url);
+            // Streamed audio/mpeg from server (proxied from private core gRPC).
+            // No remote audio_url / disk on backends — play via data URI.
+            const { data } = await axios.post(
+                "/ai/tts",
+                { text: result },
+                { params: { language: "en" }, responseType: "arraybuffer" }
+            );
+            const bytes = new Uint8Array(data as ArrayBuffer);
+            let binary = "";
+            for (let i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            // RN global btoa (Hermes/JSC) or fallback
+            const b64 =
+                typeof btoa === "function"
+                    ? btoa(binary)
+                    : // @ts-ignore — Buffer may exist in some RN builds
+                      Buffer.from(bytes).toString("base64");
+            setAudioUrl(`data:audio/mpeg;base64,${b64}`);
         } catch (error) {
             console.log(error)
         }

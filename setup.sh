@@ -25,8 +25,8 @@ need node
 need npm
 ok "python3 $(python3 --version | cut -d' ' -f2), node $(node -v), npm $(npm -v)"
 
-# ── Core (Python / Flask) ─────────────────────────────────────
-section "Setting up core service"
+# ── Core (Python / private gRPC AI worker) ─────────────────────
+section "Setting up core service (private gRPC)"
 
 cd "$REPO_ROOT/core"
 
@@ -41,8 +41,24 @@ info "Activating venv and installing dependencies..."
 source venv/bin/activate
 pip install --quiet --upgrade pip
 pip install --quiet -r requirements.txt
-deactivate
 ok "Python dependencies installed."
+
+info "Generating gRPC Python stubs from proto/ai.proto..."
+mkdir -p generated
+python -m grpc_tools.protoc \
+    -I "$REPO_ROOT/proto" \
+    --python_out=generated \
+    --grpc_python_out=generated \
+    "$REPO_ROOT/proto/ai.proto"
+# Package-relative import so `from generated import ai_pb2_grpc` works.
+if [[ "$(uname)" == "Darwin" ]]; then
+    sed -i '' 's/import ai_pb2 as ai__pb2/from . import ai_pb2 as ai__pb2/' generated/ai_pb2_grpc.py
+else
+    sed -i 's/import ai_pb2 as ai__pb2/from . import ai_pb2 as ai__pb2/' generated/ai_pb2_grpc.py
+fi
+touch generated/__init__.py
+ok "gRPC stubs generated."
+deactivate
 
 if [ ! -f ".env" ]; then
     cp .env.example .env
@@ -142,12 +158,6 @@ else
     warn "Seed script exited non-zero — if data already exists this is expected."
 fi
 
-# ── Audio directory ───────────────────────────────────────────
-section "Creating shared directories"
-
-mkdir -p "$REPO_ROOT/audio"
-ok "audio/ directory ready."
-
 # ── Done ──────────────────────────────────────────────────────
 echo ""
 echo -e "${GREEN}${BOLD}Setup complete!${NC}"
@@ -160,6 +170,6 @@ echo -e "  Start both services with:"
 echo -e "    ${BOLD}./start.sh${NC}"
 echo ""
 echo -e "  Health checks (once running):"
-echo -e "    Core   → http://localhost:5000/health"
-echo -e "    Server → http://localhost:8000/health"
+echo -e "    Server      → http://localhost:8000/health"
+echo -e "    Server + AI → http://localhost:8000/ai/health  (probes private core gRPC)"
 echo ""
