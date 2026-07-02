@@ -9,7 +9,7 @@ cd plateAI
 ./start.sh   # start both services
 ```
 
-That's it. Both services start with coloured, prefixed logs in a single terminal window.
+That's it. The private gRPC core and public Express server start with coloured, prefixed logs in a single terminal window.
 
 ---
 
@@ -27,12 +27,12 @@ No Docker, no global installs, no database server required by default.
 
 ## What `setup.sh` Does
 
-1. Creates a Python virtual environment at `core/venv/` and installs `core/requirements.txt`.
+1. Creates a Python virtual environment at `core/venv/`, installs `core/requirements.txt`, and generates gRPC stubs from `proto/ai.proto`.
 2. Runs `npm install` inside `server/`.
 3. Creates `core/.env` and `server/.env` from the bundled examples (skips if they already exist).
 4. **Detects which database to use** (see below) and runs the appropriate Prisma migration.
 5. Seeds the database with a demo user account.
-6. Creates the shared `audio/` directory used by the TTS service.
+6. Creates `core/.env` / `server/.env` from examples when missing (includes gRPC defaults). **Existing** env files are left unchanged — re-check `GRPC_HOST` / `GRPC_PORT` (core) and `CORE_GRPC_URL` (server) manually after upgrades.
 
 ---
 
@@ -83,10 +83,13 @@ Both schemas define identical models. SQLite stores enums as `TEXT`; Prisma maps
 | `TEXT_TO_SPEECH_IBM_URL` | For TTS | IBM Watson TTS service URL |
 | `SPEECH_TO_TEXT_IBM_API_KEY` | For STT | IBM Watson STT API key |
 | `SPEECH_TO_TEXT_IBM_URL` | For STT | IBM Watson STT service URL |
-| `DEBUG` | No | `True` (default) enables Flask debug mode and auto-reload |
-| `AUDIO_FOLDER` | No | Path for generated audio files. Default: `../audio` |
+| `GRPC_HOST` | No | Bind host for the private gRPC server. Default: `127.0.0.1` (loopback only) |
+| `GRPC_PORT` | No | gRPC port. Default: `50051` |
+| `DEBUG` | No | Reserved for verbose logging |
 
-The core service **will start** without API keys, but AI endpoints will return errors until they are filled in.
+The core service **will start** without API keys, but AI RPCs that need Groq/IBM will fail until they are filled in.
+
+**Core must not be exposed publicly.** Prefer `GRPC_HOST=127.0.0.1` so only co-located processes (the Express server) can connect.
 
 ### `server/.env`
 
@@ -95,6 +98,7 @@ The core service **will start** without API keys, but AI endpoints will return e
 | `PORT` | No | Port for the Express server. Default: `8000` |
 | `SECRET` | Yes | JWT signing secret. **Change this before going to production.** Generate one with: `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"` |
 | `DATABASE_URL` | Yes | Database connection string. SQLite: `file:./dev.db`. PostgreSQL: `postgresql://user:pass@host:5432/dbname` |
+| `CORE_GRPC_URL` | No | Address of the private core gRPC worker. Default: `127.0.0.1:50051` |
 
 ---
 
@@ -103,12 +107,14 @@ The core service **will start** without API keys, but AI endpoints will return e
 Once both services are running, verify them:
 
 ```bash
-curl http://localhost:5000/health
-# {"status":"ok","service":"core"}
-
 curl http://localhost:8000/health
-# {"status":"ok","service":"server"}
+# {"status":"ok","service":"server","core_grpc":"127.0.0.1:50051"}
+
+curl http://localhost:8000/ai/health
+# {"status":"ok","service":"server","core":{"status":"ok","service":"core"}, ...}
 ```
+
+AI features for clients always go through the public server (`/ai/*`). Core has **no public HTTP port**.
 
 ---
 
@@ -132,10 +138,10 @@ cd server && npm run seed
 
 ## Service Ports
 
-| Service | Port | Base URL |
-|---------|------|----------|
-| Core (Flask) | 5000 | `http://localhost:5000` |
-| Server (Express) | 8000 | `http://localhost:8000` |
+| Service | Port | Access |
+|---------|------|--------|
+| Core (private gRPC) | `50051` on `127.0.0.1` | **Server only** — not for mobile/web |
+| Server (Express) | `8000` | Public API (`/auth`, `/meals`, `/ai`) |
 
 ---
 
@@ -144,13 +150,12 @@ cd server && npm run seed
 If you need to run each service in its own terminal:
 
 ```bash
-# Terminal 1 — core
+# Terminal 1 — private core (gRPC)
 cd core
 source venv/bin/activate
-source .env
 python app.py
 
-# Terminal 2 — server
+# Terminal 2 — public server
 cd server
 npm run dev
 ```
@@ -169,11 +174,15 @@ Your `DATABASE_URL` points to PostgreSQL but it's not running. Either start Post
 
 ### IBM Watson / Groq errors
 
-The service starts without API keys, but calls to `/diet-check`, `/chat`, `/tts`, `/stt`, `/advisor`, and `/cook-for-me` will fail. Fill in the relevant keys in `core/.env` and restart.
+Core starts without API keys, but RPCs that need Groq/IBM fail. Clients see errors on `POST /ai/*`. Fill in the relevant keys in `core/.env` and restart.
+
+### `/ai/health` returns degraded / core_error
+
+Express is up but cannot reach the private gRPC core. Ensure `./start.sh` (or `python app.py` in `core/`) is running and `CORE_GRPC_URL` in `server/.env` matches `GRPC_HOST:GRPC_PORT` in `core/.env` (default `127.0.0.1:50051`).
 
 ### Port already in use
 
-Something else is on port 5000 or 8000. Change `PORT` in `server/.env` or stop the conflicting process.
+Something else is on port `8000` (HTTP) or `50051` (gRPC). Change `PORT` / `CORE_GRPC_URL` / `GRPC_PORT` accordingly, or stop the conflicting process.
 
 ### `./setup.sh: Permission denied`
 

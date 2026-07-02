@@ -1,7 +1,7 @@
 import { View, Text, ActivityIndicator, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AIAxios } from '@/lib/axios.config'
+import axios from '@/lib/axios.config'
 import useAuth from '@/hooks/useAuth';
 import { useRecoilValue } from 'recoil';
 import { mealsState } from '@/atoms';
@@ -19,7 +19,7 @@ export default function Cook() {
     async function cook() {
         try {
             setLoading(true);
-            const { data } = await AIAxios.post('/cook-for-me', {
+            const { data } = await axios.post('/ai/cook-for-me', {
                 user,
                 meal_history: meals
             });

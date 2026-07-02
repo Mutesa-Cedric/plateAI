@@ -1,11 +1,11 @@
-# Packages actually imported by the core Flask service.
-# The original pip-freeze dump (with jax, tensorflow, opencv, etc.) has been
-# preserved in requirements.full.txt for reference but is not needed to run this app.
-
-Flask>=3.0.3
-Werkzeug>=3.0.4
+certifi>=2024.8.30
 groq>=0.11.0
-ibm-watson>=8.1.0
+grpcio>=1.64.0
+grpcio-tools>=1.64.0
 ibm-cloud-sdk-core>=3.21.0
-requests>=2.32.3
+ibm-watson>=8.1.0
+protobuf>=4.25.0
 python-dotenv>=1.0.1
+requests>=2.32.0
+setuptools>=70.0.0
+typing_extensions>=4.12.0

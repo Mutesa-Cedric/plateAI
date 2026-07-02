@@ -4,7 +4,7 @@ import MealLoadingView from '@/components/MealLoadingView';
 import MealScanError from '@/components/MealScanError';
 import MealScanResults from '@/components/ScanResults';
 import useMeals from '@/hooks/useMeals';
-import { AIAxios } from '@/lib/axios.config';
+import axios from '@/lib/axios.config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -24,7 +24,7 @@ export default function ScanResults() {
 
     const fetchMealData = async () => {
         try {
-            const { data } = await AIAxios.post("/diet-check", mealBeingScanned);
+            const { data } = await axios.post("/ai/diet-check", mealBeingScanned);
             console.log(data)
             if (data.error) {
                 setError(data.error);

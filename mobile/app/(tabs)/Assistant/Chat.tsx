@@ -1,4 +1,4 @@
-import { AIAxios } from '@/lib/axios.config'
+import axios from '@/lib/axios.config'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
@@ -23,7 +23,7 @@ export default function Chat() {
                 });
                 return;
             }
-            const { data } = await AIAxios.post('/chat', {
+            const { data } = await axios.post('/ai/chat', {
                 prompt: message
             });
             setMessages([...messages, {
