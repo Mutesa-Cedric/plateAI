@@ -99,6 +99,6 @@ def suggest_next_meal(user_profile, meal_history):
     fmt_res = format_markdown(response_content)
     one_liner_description = f"{generate_one_liner(fmt_res)} HD food image"
 
-    image_64 = requests.get(f"http://157.173.127.185:4000?topic={one_liner_description}")
+    image_64 = requests.get(f"http://157.173.127.185:4000?topic={one_liner_description}", timeout=(5, 30))
 
     return {"response": fmt_res, "image": image_64.text}

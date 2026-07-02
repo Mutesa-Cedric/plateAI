@@ -32,7 +32,7 @@ No Docker, no global installs, no database server required by default.
 3. Creates `core/.env` and `server/.env` from the bundled examples (skips if they already exist).
 4. **Detects which database to use** (see below) and runs the appropriate Prisma migration.
 5. Seeds the database with a demo user account.
-6. Ensures env files include `GRPC_HOST` / `GRPC_PORT` (core) and `CORE_GRPC_URL` (server).
+6. Creates `core/.env` / `server/.env` from examples when missing (includes gRPC defaults). **Existing** env files are left unchanged — re-check `GRPC_HOST` / `GRPC_PORT` (core) and `CORE_GRPC_URL` (server) manually after upgrades.
 
 ---
 

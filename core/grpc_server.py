@@ -39,14 +39,14 @@ logging.basicConfig(
 )
 log = logging.getLogger("plateai.core")
 
-# Stream audio in ~16 KiB frames so peers can forward without buffering whole files.
 AUDIO_CHUNK_SIZE = 16 * 1024
 
 
 def _preview(text: str | None, limit: int = 160) -> str:
+    """Safe length-limited preview for non-sensitive operational strings only."""
     if text is None:
         return "<none>"
-    s = str(text).replace("\n", "\\n")
+    s = str(text).replace("\n", "\\n").replace("\r", "\\r")
     if len(s) > limit:
         return s[:limit] + f"…(+{len(s) - limit} chars)"
     return s
@@ -54,8 +54,7 @@ def _preview(text: str | None, limit: int = 160) -> str:
 
 def _peer(context) -> str:
     try:
-        peer = context.peer()
-        return peer or "unknown"
+        return context.peer() or "unknown"
     except Exception:  # noqa: BLE001
         return "unknown"
 
@@ -65,7 +64,6 @@ def _req_id() -> str:
 
 
 def _chunk_bytes(data: bytes, content_type: str):
-    """Yield AudioChunk messages, tagging content_type on the first frame."""
     if not data:
         yield ai_pb2.AudioChunk(data=b"", content_type=content_type)
         return
@@ -77,6 +75,19 @@ def _chunk_bytes(data: bytes, content_type: str):
             content_type=content_type if first else "",
         )
         first = False
+
+
+def _is_abort(exc: BaseException) -> bool:
+    """context.abort() raises an Exception that must not be remapped to INTERNAL."""
+    # grpcio historically raises Exception from abort(); newer builds may use AbortError.
+    name = type(exc).__name__
+    if name in {"AbortError", "_AbortError", "RpcError"}:
+        return True
+    # Message pattern used by grpc._server.abort
+    msg = str(exc)
+    if "AbortError" in name or "Locally aborted" in msg:
+        return True
+    return False
 
 
 class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
@@ -99,27 +110,36 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
             image_len,
             b64_len,
         )
+
+        # Validate outside the catch-all so abort() is not remapped to INTERNAL.
+        if not request.image and not request.base64:
+            log.warning("[%s] DietCheck rejected: missing image", rid)
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "image or base64 required")
+
         try:
             if request.image:
                 b64 = base64.b64encode(request.image).decode("utf-8")
-            elif request.base64:
-                b64 = request.base64
             else:
-                log.warning("[%s] DietCheck rejected: missing image", rid)
-                context.abort(grpc.StatusCode.INVALID_ARGUMENT, "image or base64 required")
+                b64 = request.base64
             result = diet_check(b64)
             payload = json.dumps(result)
             ms = (time.perf_counter() - t0) * 1000
             log.info(
-                "[%s] DietCheck → ok in %.1fms result_json_chars=%s preview=%s",
+                "[%s] DietCheck → ok in %.1fms result_json_chars=%s",
                 rid,
                 ms,
                 len(payload),
-                _preview(payload, 200),
             )
             return ai_pb2.DietCheckResponse(result_json=payload)
         except Exception as exc:  # noqa: BLE001
-            log.exception("[%s] DietCheck failed after %.1fms: %s", rid, (time.perf_counter() - t0) * 1000, exc)
+            if _is_abort(exc):
+                raise
+            log.exception(
+                "[%s] DietCheck failed after %.1fms: %s",
+                rid,
+                (time.perf_counter() - t0) * 1000,
+                exc,
+            )
             context.abort(grpc.StatusCode.INTERNAL, str(exc))
 
     def Advisor(self, request, context):
@@ -133,13 +153,15 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
             len(request.user_json or ""),
             len(request.past_meals_json or ""),
         )
-        log.debug(
-            "[%s] Advisor body recent_meal=%s user=%s past_meals=%s",
-            rid,
-            _preview(request.recent_meal_json),
-            _preview(request.user_json),
-            _preview(request.past_meals_json),
-        )
+        # No default body previews — may contain health/PII (opt-in only).
+        if Config.LOG_SENSITIVE_PREVIEWS:
+            log.debug(
+                "[%s] Advisor body (LOG_SENSITIVE_PREVIEWS) recent=%s user=%s past=%s",
+                rid,
+                _preview(request.recent_meal_json),
+                _preview(request.user_json),
+                _preview(request.past_meals_json),
+            )
         try:
             recent_meal = json.loads(request.recent_meal_json or "null")
             user = json.loads(request.user_json or "null")
@@ -148,14 +170,15 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
             advice = analysis.get("advice", "")
             ms = (time.perf_counter() - t0) * 1000
             log.info(
-                "[%s] Advisor → ok in %.1fms advice_chars=%s preview=%s",
+                "[%s] Advisor → ok in %.1fms advice_chars=%s",
                 rid,
                 ms,
                 len(advice),
-                _preview(advice),
             )
             return ai_pb2.AdvisorResponse(advice=advice)
         except Exception as exc:  # noqa: BLE001
+            if _is_abort(exc):
+                raise
             log.exception("[%s] Advisor failed: %s", rid, exc)
             context.abort(grpc.StatusCode.INTERNAL, str(exc))
 
@@ -169,17 +192,28 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
             len(request.user_json or ""),
             len(request.meal_history_json or ""),
         )
-        log.debug(
-            "[%s] CookForMe body user=%s meal_history=%s",
-            rid,
-            _preview(request.user_json),
-            _preview(request.meal_history_json),
-        )
+        if Config.LOG_SENSITIVE_PREVIEWS:
+            log.debug(
+                "[%s] CookForMe body (LOG_SENSITIVE_PREVIEWS) user=%s history=%s",
+                rid,
+                _preview(request.user_json),
+                _preview(request.meal_history_json),
+            )
+
+        user_raw = request.user_json or ""
+        history_raw = request.meal_history_json or ""
+        # Validate before try so abort keeps INVALID_ARGUMENT.
+        if not user_raw.strip() or user_raw.strip() in ("null", "None"):
+            log.warning("[%s] CookForMe rejected: missing profile", rid)
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "user profile and meal history are required",
+            )
+
         try:
-            user_profile = json.loads(request.user_json or "null")
-            meal_history = json.loads(request.meal_history_json or "[]")
+            user_profile = json.loads(user_raw or "null")
+            meal_history = json.loads(history_raw or "[]")
             if not user_profile or meal_history is None:
-                log.warning("[%s] CookForMe rejected: missing profile/history", rid)
                 context.abort(
                     grpc.StatusCode.INVALID_ARGUMENT,
                     "user profile and meal history are required",
@@ -189,49 +223,58 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
             image = meal_res.get("image", "") or ""
             ms = (time.perf_counter() - t0) * 1000
             log.info(
-                "[%s] CookForMe → ok in %.1fms response_chars=%s image_chars=%s preview=%s",
+                "[%s] CookForMe → ok in %.1fms response_chars=%s image_chars=%s",
                 rid,
                 ms,
                 len(response),
                 len(image),
-                _preview(response),
             )
             return ai_pb2.CookForMeResponse(response=response, image=image)
         except Exception as exc:  # noqa: BLE001
+            if _is_abort(exc):
+                raise
             log.exception("[%s] CookForMe failed: %s", rid, exc)
             context.abort(grpc.StatusCode.INTERNAL, str(exc))
 
     def Chat(self, request, context):
         rid = _req_id()
         t0 = time.perf_counter()
+        prompt = request.prompt or ""
         log.info(
-            "[%s] Chat ← peer=%s prompt_chars=%s preview=%s",
+            "[%s] Chat ← peer=%s prompt_chars=%s",
             rid,
             _peer(context),
-            len(request.prompt or ""),
-            _preview(request.prompt),
+            len(prompt),
         )
+        if Config.LOG_SENSITIVE_PREVIEWS:
+            log.debug(
+                "[%s] Chat prompt (LOG_SENSITIVE_PREVIEWS)=%s",
+                rid,
+                _preview(prompt),
+            )
+
+        if not prompt.strip():
+            log.warning("[%s] Chat rejected: empty prompt", rid)
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "prompt is required")
+
         try:
-            if not (request.prompt or "").strip():
-                log.warning("[%s] Chat rejected: empty prompt", rid)
-                context.abort(grpc.StatusCode.INVALID_ARGUMENT, "prompt is required")
-            msg = respond_prompt(prompt=request.prompt)
+            msg = respond_prompt(prompt=prompt)
             response = msg.get("response", "")
             ms = (time.perf_counter() - t0) * 1000
             log.info(
-                "[%s] Chat → ok in %.1fms response_chars=%s preview=%s",
+                "[%s] Chat → ok in %.1fms response_chars=%s",
                 rid,
                 ms,
                 len(response),
-                _preview(response),
             )
             return ai_pb2.ChatResponse(response=response)
         except Exception as exc:  # noqa: BLE001
+            if _is_abort(exc):
+                raise
             log.exception("[%s] Chat failed: %s", rid, exc)
             context.abort(grpc.StatusCode.INTERNAL, str(exc))
 
     def SpeechToText(self, request_iterator, context):
-        """Client-streaming STT: assemble audio in memory, transcribe once."""
         rid = _req_id()
         t0 = time.perf_counter()
         language = "en"
@@ -240,6 +283,8 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
         chunks: list[bytes] = []
         frame_count = 0
         config_seen = False
+        total = 0
+        max_bytes = Config.STT_MAX_AUDIO_BYTES
 
         log.info("[%s] SpeechToText ← stream open peer=%s", rid, _peer(context))
 
@@ -261,19 +306,27 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
                     )
                 elif which == "audio":
                     if msg.audio:
+                        total += len(msg.audio)
+                        if total > max_bytes:
+                            log.warning(
+                                "[%s] SpeechToText rejected: audio exceeds cap %s bytes",
+                                rid,
+                                max_bytes,
+                            )
+                            context.abort(
+                                grpc.StatusCode.RESOURCE_EXHAUSTED,
+                                f"audio exceeds maximum of {max_bytes} bytes",
+                            )
                         chunks.append(msg.audio)
                         frame_count += 1
                         if frame_count == 1 or frame_count % 20 == 0:
-                            so_far = sum(len(c) for c in chunks)
                             log.debug(
                                 "[%s] SpeechToText ← audio frame #%s size=%s total_so_far=%s",
                                 rid,
                                 frame_count,
                                 len(msg.audio),
-                                so_far,
+                                total,
                             )
-                else:
-                    log.debug("[%s] SpeechToText ← empty/unknown frame", rid)
 
             audio_bytes = b"".join(chunks)
             log.info(
@@ -298,14 +351,15 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
 
             ms = (time.perf_counter() - t0) * 1000
             log.info(
-                "[%s] SpeechToText → ok in %.1fms text_chars=%s preview=%s",
+                "[%s] SpeechToText → ok in %.1fms text_chars=%s",
                 rid,
                 ms,
                 len(text or ""),
-                _preview(text),
             )
             return ai_pb2.SttResponse(text=text or "")
         except Exception as exc:  # noqa: BLE001
+            if _is_abort(exc):
+                raise
             log.exception(
                 "[%s] SpeechToText failed after %.1fms: %s",
                 rid,
@@ -315,24 +369,29 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
             context.abort(grpc.StatusCode.INTERNAL, str(exc))
 
     def TextToSpeech(self, request, context):
-        """Server-streaming TTS: synthesize in memory and stream frames out."""
         rid = _req_id()
         t0 = time.perf_counter()
         text = (request.text or "").strip()
         language = (request.language or "en").lower()
         log.info(
-            "[%s] TextToSpeech ← peer=%s language=%s text_chars=%s preview=%s",
+            "[%s] TextToSpeech ← peer=%s language=%s text_chars=%s",
             rid,
             _peer(context),
             language,
             len(text),
-            _preview(text),
         )
-        try:
-            if not text:
-                log.warning("[%s] TextToSpeech rejected: empty text", rid)
-                context.abort(grpc.StatusCode.INVALID_ARGUMENT, "text is required")
+        if Config.LOG_SENSITIVE_PREVIEWS:
+            log.debug(
+                "[%s] TextToSpeech text (LOG_SENSITIVE_PREVIEWS)=%s",
+                rid,
+                _preview(text),
+            )
 
+        if not text:
+            log.warning("[%s] TextToSpeech rejected: empty text", rid)
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, "text is required")
+
+        try:
             if language == "rw":
                 audio = kinyarwanda_text_to_speech(text)
                 content_type = "audio/mpeg"
@@ -376,6 +435,8 @@ class PlateAIServicer(ai_pb2_grpc.PlateAIServicer):
                 sent,
             )
         except Exception as exc:  # noqa: BLE001
+            if _is_abort(exc):
+                raise
             log.exception("[%s] TextToSpeech failed: %s", rid, exc)
             context.abort(grpc.StatusCode.INTERNAL, str(exc))
 
@@ -385,8 +446,17 @@ def serve() -> None:
     port = Config.GRPC_PORT
     bind_addr = f"{host}:{port}"
 
+    # Defense-in-depth: warn loudly if binding beyond loopback without TLS.
+    if host not in ("127.0.0.1", "localhost", "::1"):
+        log.warning(
+            "GRPC_HOST=%s is not loopback. Core uses insecure credentials — "
+            "only safe on a private network. Prefer 127.0.0.1 for co-located server.",
+            host,
+        )
+
+    workers = max(1, Config.GRPC_MAX_WORKERS)
     server = grpc.server(
-        futures.ThreadPoolExecutor(max_workers=10),
+        futures.ThreadPoolExecutor(max_workers=workers),
         options=[
             ("grpc.max_send_message_length", 50 * 1024 * 1024),
             ("grpc.max_receive_message_length", 50 * 1024 * 1024),
@@ -395,8 +465,17 @@ def serve() -> None:
     ai_pb2_grpc.add_PlateAIServicer_to_server(PlateAIServicer(), server)
     server.add_insecure_port(bind_addr)
     server.start()
-    log.info("gRPC core listening on %s (private AI worker, verbose logging on)", bind_addr)
-    log.info("DEBUG=%s GRPC_HOST=%s GRPC_PORT=%s", Config.DEBUG, host, port)
+    log.info(
+        "gRPC core listening on %s (private AI worker, max_workers=%s)",
+        bind_addr,
+        workers,
+    )
+    log.info(
+        "DEBUG=%s LOG_SENSITIVE_PREVIEWS=%s STT_MAX_AUDIO_BYTES=%s",
+        Config.DEBUG,
+        Config.LOG_SENSITIVE_PREVIEWS,
+        Config.STT_MAX_AUDIO_BYTES,
+    )
     server.wait_for_termination()
 
 

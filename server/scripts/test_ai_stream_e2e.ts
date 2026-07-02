@@ -396,6 +396,7 @@ function httpRequest(opts: {
   path: string;
   headers: Record<string, any>;
   body: string | Buffer;
+  timeoutMs?: number;
 }): Promise<{ status: number; headers: any; body: Buffer }> {
   return new Promise((resolve, reject) => {
     const bodyBuf = Buffer.isBuffer(opts.body)
@@ -405,6 +406,7 @@ function httpRequest(opts: {
     if (headers["Content-Length"] === undefined) {
       headers["Content-Length"] = String(bodyBuf.length);
     }
+    const timeoutMs = opts.timeoutMs ?? 60_000;
     const req = http.request(
       {
         method: opts.method,
@@ -412,6 +414,7 @@ function httpRequest(opts: {
         port: opts.port,
         path: opts.path,
         headers,
+        timeout: timeoutMs,
       },
       (res) => {
         const chunks: Buffer[] = [];
@@ -425,6 +428,9 @@ function httpRequest(opts: {
         );
       }
     );
+    req.on("timeout", () => {
+      req.destroy(new Error(`httpRequest timed out after ${timeoutMs}ms`));
+    });
     req.on("error", reject);
     req.write(bodyBuf);
     req.end();

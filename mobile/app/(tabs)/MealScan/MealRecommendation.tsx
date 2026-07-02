@@ -74,6 +74,10 @@ export default function MealRecommendation() {
 
     const getSpeech = async () => {
         try {
+            if (!result || !result.trim()) {
+                console.log("TTS skipped: no advice text yet");
+                return;
+            }
             // Streamed audio/mpeg from server (proxied from private core gRPC).
             // No remote audio_url / disk on backends — play via data URI.
             const { data } = await axios.post(

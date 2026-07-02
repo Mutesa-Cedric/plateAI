@@ -75,7 +75,7 @@ class GrpcStreamTests(unittest.TestCase):
         ) as m:
             res = self.stub.SpeechToText(gen())
         m.assert_called_once()
-        args, kwargs = m.call_args
+        args, _kwargs = m.call_args
         self.assertEqual(args[0], b"hello world")
         self.assertEqual(res.text, "hello world")
 
