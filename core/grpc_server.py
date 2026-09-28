@@ -471,10 +471,11 @@ def serve() -> None:
         workers,
     )
     log.info(
-        "DEBUG=%s LOG_SENSITIVE_PREVIEWS=%s STT_MAX_AUDIO_BYTES=%s",
+        "DEBUG=%s LOG_SENSITIVE_PREVIEWS=%s STT_MAX_AUDIO_BYTES=%s AI_CACHE_MAXSIZE=%s",
         Config.DEBUG,
         Config.LOG_SENSITIVE_PREVIEWS,
         Config.STT_MAX_AUDIO_BYTES,
+        Config.AI_CACHE_MAXSIZE,
     )
     server.wait_for_termination()
 

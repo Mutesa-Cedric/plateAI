@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { AuthedRequest } from "../../middlewares/auth";
+import { getCachedMeal, getCachedMealHistory } from "../../utils/appData";
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -49,16 +50,7 @@ export default class MealsController {
                 return res.status(403).json({ message: "Forbidden" });
             }
 
-            const meals = await prisma.meal.findMany({
-                where: { userId: authedId },
-                select: {
-                    id: true,
-                    foodItems: true,
-                    createdAt: true,
-                    updatedAt: true,
-                },
-                orderBy: { createdAt: "desc" },
-            });
+            const meals = await getCachedMealHistory(prisma, authedId);
 
             res.status(200).json({
                 success: true,
@@ -78,9 +70,7 @@ export default class MealsController {
                 return res.status(401).json({ message: "Unauthorized" });
             }
 
-            const meal = await prisma.meal.findUnique({
-                where: { id: mealId },
-            });
+            const meal = await getCachedMeal(prisma, mealId);
 
             if (!meal) {
                 return res.status(404).json({ message: "Meal not found" });

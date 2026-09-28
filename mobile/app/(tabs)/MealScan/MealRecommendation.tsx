@@ -3,6 +3,7 @@ import CustomButton from '@/components/CustomButton';
 import useAuth from '@/hooks/useAuth';
 import useMeals from '@/hooks/useMeals';
 import axios from '@/lib/axios.config';
+import { advisorPastMeals, promptUserFields } from '@/lib/utils';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
@@ -57,8 +58,10 @@ export default function MealRecommendation() {
                 recent_meal: {
                     foodItems: mostRecentMeal?.foodItems,
                 },
-                past_meals: meals?.map(meal => meal.foodItems),
-                user
+                // Advisor only reads the 3 most recent meals; extra history
+                // would ride over mobile data and bust the content cache key.
+                past_meals: advisorPastMeals(meals),
+                user: promptUserFields(user),
             });
             if (data.advice) {
                 setResult(data.advice);

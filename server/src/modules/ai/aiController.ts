@@ -2,6 +2,13 @@ import { Request, Response } from "express";
 import Busboy = require("busboy");
 import { coreClient, unaryCall, getCoreGrpcUrl } from "../../grpc/coreClient";
 import { log, requestId } from "../../utils/logger";
+import {
+    canonicalizeChatPrompt,
+    canonicalizeCookHistory,
+    canonicalizePastMeals,
+    canonicalizeRecentMeal,
+    canonicalizeUser,
+} from "../../utils/payloads";
 
 const STT_MAX_BYTES = Number(process.env.STT_MAX_AUDIO_BYTES || 15 * 1024 * 1024);
 
@@ -95,9 +102,13 @@ export default class AiController {
         const t0 = Date.now();
         try {
             const { recent_meal, user, past_meals } = req.body || {};
+            const trimmedRecent = canonicalizeRecentMeal(recent_meal);
+            const trimmedUser = user == null ? null : canonicalizeUser(user);
+            const trimmedPast = canonicalizePastMeals(past_meals);
             log.info("ai/advisor", "→ request", {
                 rid,
                 pastMealsCount: Array.isArray(past_meals) ? past_meals.length : "n/a",
+                pastMealsSent: trimmedPast.length,
                 hasUser: Boolean(user),
                 hasRecentMeal: Boolean(recent_meal),
             });
@@ -106,9 +117,9 @@ export default class AiController {
                 { recent_meal_json: string; user_json: string; past_meals_json: string },
                 { advice: string }
             >("Advisor", {
-                recent_meal_json: JSON.stringify(recent_meal ?? null),
-                user_json: JSON.stringify(user ?? null),
-                past_meals_json: JSON.stringify(past_meals ?? []),
+                recent_meal_json: JSON.stringify(trimmedRecent),
+                user_json: JSON.stringify(trimmedUser),
+                past_meals_json: JSON.stringify(trimmedPast),
             });
 
             log.info("ai/advisor", "← response", {
@@ -131,11 +142,14 @@ export default class AiController {
         const t0 = Date.now();
         try {
             const { user, meal_history } = req.body || {};
+            const trimmedUser = canonicalizeUser(user);
+            const trimmedHistory = canonicalizeCookHistory(meal_history);
             log.info("ai/cook-for-me", "→ request", {
                 rid,
                 mealHistoryCount: Array.isArray(meal_history)
                     ? meal_history.length
                     : "n/a",
+                mealHistorySent: trimmedHistory.length,
                 hasUser: Boolean(user),
             });
 
@@ -150,8 +164,8 @@ export default class AiController {
                 { user_json: string; meal_history_json: string },
                 { response: string; image: string }
             >("CookForMe", {
-                user_json: JSON.stringify(user),
-                meal_history_json: JSON.stringify(meal_history),
+                user_json: JSON.stringify(trimmedUser),
+                meal_history_json: JSON.stringify(trimmedHistory),
             });
 
             log.info("ai/cook-for-me", "← response", {
@@ -177,7 +191,7 @@ export default class AiController {
         const rid = requestId(req as any);
         const t0 = Date.now();
         try {
-            const prompt = req.body?.prompt;
+            const prompt = canonicalizeChatPrompt(req.body?.prompt);
             log.info("ai/chat", "→ request", {
                 rid,
                 promptChars: prompt ? String(prompt).length : 0,

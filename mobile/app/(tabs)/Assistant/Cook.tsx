@@ -2,6 +2,7 @@ import { View, Text, ActivityIndicator, Image, TouchableOpacity } from 'react-na
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from '@/lib/axios.config'
+import { cookMealHistory, promptUserFields } from '@/lib/utils';
 import useAuth from '@/hooks/useAuth';
 import { useRecoilValue } from 'recoil';
 import { mealsState } from '@/atoms';
@@ -20,8 +21,10 @@ export default function Cook() {
         try {
             setLoading(true);
             const { data } = await axios.post('/ai/cook-for-me', {
-                user,
-                meal_history: meals
+                user: promptUserFields(user),
+                // foodItems only, recent slice — images/older meals are unused
+                // by the 8k cook prompt and would change the cache key.
+                meal_history: cookMealHistory(meals),
             });
             setImage(data.image);
             setResponse(data.response);

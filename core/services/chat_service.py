@@ -1,9 +1,20 @@
 from groq import Groq
 from config import Config
+from cache import cached_get_or_set
+from payloads import canonicalize_chat_prompt
 
 client = Groq(api_key=Config.GROQ_API_KEY)
 
 def respond_prompt(prompt):
+    canonical = canonicalize_chat_prompt(prompt)
+
+    def _produce():
+        return _respond_prompt_uncached(canonical)
+
+    return cached_get_or_set("chat", canonical, _produce)
+
+
+def _respond_prompt_uncached(prompt):
     chat_completion = client.chat.completions.create(
         messages=[
             {

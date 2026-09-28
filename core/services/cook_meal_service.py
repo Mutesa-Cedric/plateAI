@@ -1,14 +1,21 @@
 from groq import Groq
 from config import Config
+from cache import cached_get_or_set
+from payloads import (
+    COOK_PROMPT_TOKEN_BUDGET,
+    canonicalize_user,
+    cook_key_material,
+    estimate_tokens,
+    extract_food_item_list,
+)
 import os
 import requests
 
 client = Groq(api_key=Config.GROQ_API_KEY)
 
 def format_meal_history(meal_history):
-    return [
-        meal['foodItems'] for meal in meal_history
-    ]
+    """foodItems only — images / ids / timestamps never enter the prompt."""
+    return extract_food_item_list(meal_history)
 
 def build_prompt(user_profile, formatted_meal_history):
     return f"""
@@ -80,8 +87,32 @@ def generate_one_liner(fmt_res):
     
     return response.choices[0].message.content.strip()
 
+def trim_meal_history_to_context(user_profile, formatted_meal_history):
+    """Keep the newest meals that still fit the 8k cook-for-me window."""
+    selected = []
+    for item in formatted_meal_history:
+        trial = selected + [item]
+        prompt = build_prompt(user_profile, trial)
+        if selected and estimate_tokens(prompt) > COOK_PROMPT_TOKEN_BUDGET:
+            break
+        selected = trial
+    return selected
+
+
 def suggest_next_meal(user_profile, meal_history):
-    formatted_meal_history = format_meal_history(meal_history)
+    user = canonicalize_user(user_profile)
+    formatted_meal_history = trim_meal_history_to_context(
+        user, format_meal_history(meal_history)
+    )
+    material = cook_key_material(user, formatted_meal_history)
+
+    def _produce():
+        return _suggest_next_meal_uncached(user, formatted_meal_history)
+
+    return cached_get_or_set("cook_for_me", material, _produce)
+
+
+def _suggest_next_meal_uncached(user_profile, formatted_meal_history):
     prompt = build_prompt(user_profile, formatted_meal_history)
 
     response = client.chat.completions.create(

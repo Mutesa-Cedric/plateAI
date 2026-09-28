@@ -25,3 +25,6 @@ class Config:
 
     # Max STT audio assembled in memory (bytes). Align with server upload cap.
     STT_MAX_AUDIO_BYTES = int(os.environ.get("STT_MAX_AUDIO_BYTES", str(15 * 1024 * 1024)))
+
+    # Content-addressed AI result cache (scan / advisor / cook / chat).
+    AI_CACHE_MAXSIZE = int(os.environ.get("AI_CACHE_MAXSIZE", "512"))

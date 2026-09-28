@@ -3,6 +3,8 @@ import json
 import re
 from groq import Groq
 from config import Config
+from cache import content_key, get_ai_cache, log_cache
+from image_normalize import decode_image_input, image_fingerprint
 
 # Function 1: Encode Image to Base64
 def encode_image(image_file):
@@ -65,11 +67,14 @@ def extract_json_content(data):
     json_match = re.search(r'(\{.*\}|\[.*\])', data, re.DOTALL)
     return json_match.group(0) if json_match else None
 
-# Main Diet Check Function
-def diet_check(base64_image):
+# Transient pipeline failure — do not cache (model may succeed on retry).
+_TRANSIENT_SCAN_ERROR = "Unable to extract food metrics from the image"
+
+
+def _diet_check_uncached(base64_image):
     print("\n =============================== \n")
     client = Groq(api_key=Config.GROQ_API_KEY)
-    
+
     # Step 1: List contents of the image
     for _ in range(10):  # Maximum 10 retries
 
@@ -110,4 +115,27 @@ def diet_check(base64_image):
             except json.JSONDecodeError:
                 continue
     
-    return {"error": "Unable to extract food metrics from the image"}
+    return {"error": _TRANSIENT_SCAN_ERROR}
+
+
+def diet_check(base64_image):
+    """Run the 4-call scan pipeline, or return a cached result for this image.
+
+    The cache key is a fingerprint of the *normalized* image (RGB pixels), so
+    retries, data-URI vs raw base64, and JPEG/PNG re-encodes of the same
+    pixels share one entry and skip all four provider calls.
+    """
+    raw = decode_image_input(b64=base64_image)
+    fingerprint = image_fingerprint(raw)
+    key = content_key("diet_check", fingerprint)
+    cache = get_ai_cache()
+    hit = cache.get(key)
+    if hit is not None:
+        log_cache("hit", "diet_check", key)
+        return hit
+    log_cache("miss", "diet_check", key)
+    result = _diet_check_uncached(base64_image)
+    if isinstance(result, dict) and result.get("error") == _TRANSIENT_SCAN_ERROR:
+        return result
+    cache.set(key, result)
+    return result

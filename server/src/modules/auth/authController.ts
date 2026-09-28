@@ -1,5 +1,6 @@
 import { comparePassword, hashPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../utils/jwt";
+import { getCachedUserProfile } from "../../utils/appData";
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -154,22 +155,7 @@ export default class AuthController {
             if (!userId) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
-            const user = await prisma.user.findUnique({
-                where: { id: userId },
-                select: {
-                    id: true,
-                    email: true,
-                    firstName: true,
-                    lastName: true,
-                    age: true,
-                    weight: true,
-                    height: true,
-                    purpose: true,
-                    gender: true,
-                    createdAt: true,
-                    updatedAt: true,
-                },
-            });
+            const user = await getCachedUserProfile(prisma, userId);
             res.status(200).json({ success: true, user });
         } catch (error) {
             console.error("getUser error", error);
